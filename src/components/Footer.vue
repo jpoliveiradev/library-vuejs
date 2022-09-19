@@ -2,10 +2,11 @@
   <v-footer padless>
     <v-card flat tile class="white--text text-center flex">
       <v-card-text class="black--text">
-        {{ new Date().getFullYear() }} — <strong>JP Oliveira</strong>
+        {{ new Date().getFullYear() }} —
         <v-btn icon class="black--text" href="https://github.com/jpoliveiradev" target="_blank">
           <v-icon>mdi-github</v-icon>
         </v-btn>
+        <strong>JP Oliveira</strong>
       </v-card-text>
     </v-card>
   </v-footer>

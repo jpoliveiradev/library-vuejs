@@ -2,13 +2,13 @@
   <div class="app">
     <div class="d-flex flex-column align-center">
       <tbody>
-        <v-card elevation="3" style="border: 1px solid #8f16cc">
+        <v-card elevation="3" style="border: 1px solid #004d40">
           <v-card-title>
             <h3>Editoras |</h3>
-            <v-dialog v-model="dialog" persistent max-width="500px">
+            <v-dialog v-model="dialog" persistent max-width="400px">
               <template v-slot:activator="{ on, attrs }">
                 <!-- <v-btn color="" dark class="novo mb-2" v-bind="attrs" v-on="on" rounded> Novo <span>+</span> </v-btn> -->
-                <v-btn slot="activator" @click="titleModal = 'Cadastrar Editora'" class="novo mb-2" v-bind="attrs" v-on="on" color="#7433FB" dark rounded> Novo <span>+</span> </v-btn>
+                <v-btn slot="activator" @click="titleModal = 'Cadastrar Editora'" class="novo mb-2" v-bind="attrs" v-on="on" color="#004D40" dark rounded> Novo <span>+</span> </v-btn>
               </template>
               <v-card>
                 <v-card-title>
@@ -16,8 +16,8 @@
                 </v-card-title>
                 <v-card-text>
                   <v-form class="px-2" ref="form" lazy-validation>
-                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Nome da Editora" color="deep-purple" v-model="editora.nomeEditora" append-icon="mdi-bookshelf"></v-text-field>
-                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Cidade da Editora" color="deep-purple" v-model="editora.cidade" append-icon="mdi-city" required></v-text-field>
+                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Nome da Editora" color="#004D40" v-model="editora.nomeEditora" append-icon="mdi-bookshelf" :counter="50" required></v-text-field>
+                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Cidade da Editora" color="#004D40" v-model="editora.cidade" append-icon="mdi-city" :counter="50" required></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-divider></v-divider>
@@ -25,18 +25,30 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="error" text @click="close"> Fechar </v-btn>
-                  <v-btn color="deep-purple" text @click="salvar"> Salvar </v-btn>
+                  <v-btn color="#004D40" text @click="salvar"> Salvar </v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
             <v-spacer></v-spacer>
-            <v-text-field v-model="search" append-icon="mdi-magnify" label="Pesquisar" single-line hide-details></v-text-field>
+            <v-text-field color="#004D40" v-model="search" append-icon="mdi-magnify" label="Pesquisar" single-line hide-details></v-text-field>
           </v-card-title>
-          <v-data-table :headers="headers" :items="editoras" :items-per-page="5" :search="search" loading="items" loading-text="Carregando dados... Aguarde!" no-results-text="Nenhuma editora encontrada">
+          <v-data-table
+            :headers="headers"
+            :items="editoras"
+            :items-per-page="5"
+            :footer-props="{
+              itemsPerPageOptions: [5, 10, 25, 50],
+              itemsPerPageText: 'Linhas por página',
+            }"
+            :search="search"
+            loading="items"
+            loading-text="Carregando dados... Aguarde!"
+            no-results-text="Nenhuma Editora encontrada"
+          >
             <template v-slot:[`item.acoes`]="{ item }">
-              <v-tooltip top color="#8f16cc">
+              <v-tooltip top color="#004D40">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn v-bind="attrs" v-on="on" elevation="1" fab x-small color="#5E35B1" dark @click="showEdit(item)">
+                  <v-btn v-bind="attrs" v-on="on" elevation="1" fab x-small color="#004D40" dark @click="showEdit(item)">
                     <v-icon> mdi-pencil </v-icon>
                   </v-btn>
                 </template>
@@ -59,7 +71,7 @@
 </template>
 
 <script>
-import Editora from "../Services/editoras";
+import Editora from "../services/editoras";
 
 export default {
   name: "editoras",
@@ -72,10 +84,10 @@ export default {
         minValue: (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
       },
       headers: [
-        { text: "Id", value: "id", class: "deep-purple darken-3,  font-weight-bold, white--text herd" },
-        { text: "Nome", value: "nomeEditora", class: "deep-purple darken-3, font-weight-bold, white--text" },
-        { text: "Cidade", value: "cidade", class: "deep-purple darken-3, font-weight-bold, white--text" },
-        { text: "Ações", value: "acoes", class: "deep-purple darken-3, font-weight-bold, white--text", sortable: false },
+        { text: "Id", value: "id", class: "text-md-body-1 font-weight-bold black--text" },
+        { text: "Nome", value: "nomeEditora", class: "text-md-body-1 font-weight-bold black--text" },
+        { text: "Cidade", value: "cidade", class: "text-md-body-1 font-weight-bold black--text" },
+        { text: "Ações", value: "acoes", class: "text-md-body-1 font-weight-bold black--text", sortable: false },
       ],
       dialog: false,
       titleModal: "",
@@ -137,7 +149,7 @@ export default {
         title: "Você deseja realmente apagar?",
         text: "Você não será capaz de reverter isso!",
         icon: "warning",
-        confirmButtonColor: "#8f16cc",
+        confirmButtonColor: "#004D40",
         cancelButtonColor: "#d33",
         cancelButtonText: "Cancelar",
         showCancelButton: true,
@@ -169,6 +181,10 @@ export default {
 tbody {
   margin: 20px;
   width: 60%;
+}
+.v-data-table {
+  margin-top: 10px;
+  margin-left: 20px;
 }
 .novo {
   margin: 12px;

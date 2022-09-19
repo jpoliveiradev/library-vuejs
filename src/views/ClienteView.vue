@@ -16,10 +16,10 @@
                 </v-card-title>
                 <v-card-text>
                   <v-form class="px-2" ref="form" lazy-validation>
-                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Nome do Cliente" color="indigo lighten-5" v-model="cliente.nomeUsuario" append-icon="mdi-account"></v-text-field>
-                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Endereço do Cliente" color="indigo lighten-5" v-model="cliente.endereco" append-icon="mdi-home-city" required></v-text-field>
-                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Cidade do Cliente" color="indigo lighten-5" v-model="cliente.cidade" append-icon="mdi-city" required></v-text-field>
-                    <v-text-field :rules="[rules.required, rules.email]" label="Email do Cliente" color="indigo lighten-5" v-model="cliente.email" append-icon="mdi-email" required></v-text-field>
+                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Nome do Cliente" color="#004D40" v-model="cliente.nomeUsuario" append-icon="mdi-account" :counter="50" required></v-text-field>
+                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Endereço do Cliente" color="#004D40" v-model="cliente.endereco" append-icon="mdi-home-city" :counter="50" required></v-text-field>
+                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Cidade do Cliente" color="#004D40" v-model="cliente.cidade" append-icon="mdi-city" :counter="50" required></v-text-field>
+                    <v-text-field :rules="[rules.required, rules.email]" label="Email do Cliente" color="#004D40" v-model="cliente.email" append-icon="mdi-email" :counter="50" required></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-divider></v-divider>
@@ -27,12 +27,12 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="error" text @click="close"> Fechar </v-btn>
-                  <v-btn color="deep-purple" text @click="salvar"> Salvar </v-btn>
+                  <v-btn color="004D40" text @click="salvar"> Salvar </v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
             <v-spacer></v-spacer>
-            <v-text-field v-model="search" append-icon="mdi-magnify" label="Pesquisar" single-line hide-details></v-text-field>
+            <v-text-field color="#004D40" v-model="search" append-icon="mdi-magnify" label="Pesquisar" single-line hide-details></v-text-field>
           </v-card-title>
           <v-data-table
             class="elevation-1"
@@ -76,8 +76,7 @@
 </template>
 
 <script>
-import Cliente from "../Services/clientes";
-import Color from "../plugins/vuetify";
+import Cliente from "../services/clientes";
 
 export default {
   name: "clientes",
@@ -91,14 +90,13 @@ export default {
         email: (value) => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value) || "Email Inválido.",
       },
       headers: [
-        { text: "Id", value: "id", class: "indigo lighten-5,  font-weight-bold, white--text herd" },
-        { text: "Nome", value: "nomeUsuario", class: "indigo lighten-5, font-weight-bold, white--text" },
-        { text: "Endereço", value: "endereco", class: "indigo lighten-5, font-weight-bold, white--text" },
-        { text: "Cidade", value: "cidade", class: "indigo lighten-5, font-weight-bold, white--text" },
-        { text: "Email", value: "email", class: "indigo lighten-5, font-weight-bold, white--text" },
-        { text: "Ações", value: "acoes", class: "indigo lighten-5, font-weight-bold, white--text", sortable: false },
+        { text: "Id", value: "id", class: "text-md-body-1 font-weight-bold black--text" },
+        { text: "Nome", value: "nomeUsuario", class: "text-md-body-1 font-weight-bold black--text" },
+        { text: "Endereço", value: "endereco", class: "text-md-body-1 font-weight-bold black--text" },
+        { text: "Cidade", value: "cidade", class: "text-md-body-1 font-weight-bold black--text" },
+        { text: "Email", value: "email", class: "text-md-body-1 font-weight-bold black--text" },
+        { text: "Ações", value: "acoes", class: "text-md-body-1 font-weight-bold black--text", sortable: false },
       ],
-      color: Color,
       dialog: false,
       titleModal: "",
       cliente: {
@@ -157,7 +155,7 @@ export default {
           this.cliente = {};
           this.dialog = false;
           this.$refs.form.resetValidation();
-          this.$swal("Cliente Alterado com Sucesso", "", "success");
+          this.$swal("Cliente Atualizado com Sucesso", "", "success");
 
           this.listar();
         })
@@ -176,7 +174,7 @@ export default {
         title: "Você deseja realmente apagar?",
         text: "Você não será capaz de reverter isso!",
         icon: "warning",
-        confirmButtonColor: "#8f16cc",
+        confirmButtonColor: "#004D40",
         cancelButtonColor: "#d33",
         cancelButtonText: "Cancelar",
         showCancelButton: true,
@@ -185,7 +183,7 @@ export default {
         if (resposta.isConfirmed) {
           Cliente.excluir(id)
             .then(() => {
-              this.$swal("Cliente Deletado!", "", "success");
+              this.$swal("Cliente Deletado com Sucesso!", "", "success");
               this.listar();
             })
             .catch((e) => {
@@ -214,14 +212,15 @@ tbody {
   margin: 30px;
   width: 70%;
 }
+.v-data-table {
+  margin-top: 10px;
+  margin-left: 20px;
+}
 .novo {
   margin: 12px;
 }
 .novo span {
   padding-left: 3px;
   font-size: 1.5rem;
-}
-.colorTitle {
-  background-color: rgb(147, 22, 22);
 }
 </style>

@@ -27,15 +27,11 @@
           <span>Livros</span>
         </v-btn>
 
-        <v-btn class="transparent" active-class="activated-btn" to="/alugueis" depressed rounded>
+        <v-btn class="transparent" style="margin-right: 200px" active-class="activated-btn" to="/alugueis" depressed rounded>
           <v-icon> mdi-book-account </v-icon>
           <span>Alugueis</span>
         </v-btn>
-      </div>
-      <v-spacer></v-spacer>
-      <v-btn class="dark" depressed rounded>
-        <span>dark</span>
-      </v-btn>
+      </div>      
     </v-toolbar>
   </nav>
 </template>

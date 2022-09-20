@@ -5,7 +5,7 @@
         <v-card elevation="3" style="border: 1px solid #004d40">
           <v-card-title>
             <h3>Livros |</h3>
-            <v-dialog v-model="dialog" persistent max-width="500px">
+            <v-dialog v-model="dialog" persistent max-width="450px">
               <template v-slot:activator="{ on, attrs }">
                 <v-btn slot="activator" @click="titleModal = 'Cadastrar Livro'" class="novo mb-2" v-bind="attrs" v-on="on" color="#004D40" dark rounded> Novo <span>+</span> </v-btn>
               </template>
@@ -15,13 +15,46 @@
                 </v-card-title>
                 <v-card-text>
                   <v-form class="px-2" ref="form" lazy-validation>
-                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Nome do Livro" color="#004D40" v-model="livro.nomeLivro" append-icon="mdi-book-open-page-variant" :counter="50" required></v-text-field>
-                    <v-select v-model="livro.editoraId" :rules="[rules.required]" :items="editoras" item-text="nomeEditora" item-value="id" label="Editora do Livro" color="#004D40" required></v-select>
-                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Autor do Livro" color="#004D40" v-model="livro.autor" append-icon="mdi-account-edit" :counter="50" required></v-text-field>
+                    <v-text-field
+                      :rules="[rules.required, rules.maxValue, rules.minValue]"
+                      label="Nome do Livro"
+                      color="#004D40"
+                      v-model="livro.nomeLivro"
+                      append-icon="mdi-book-open-page-variant"
+                      :counter="50"
+                      required></v-text-field>
+
+                    <v-select
+                      v-model="livro.editoraId"
+                      :rules="[rules.required]"
+                      :items="editoras"
+                      item-text="nomeEditora"
+                      item-value="id"
+                      label="Editora do Livro"
+                      color="#004D40"
+                      append-icon="mdi-bookshelf"
+                      required></v-select>
+
+                    <v-text-field
+                      :rules="[rules.required, rules.maxValue, rules.minValue]"
+                      label="Autor do Livro"
+                      color="#004D40"
+                      v-model="livro.autor"
+                      append-icon="mdi-account-edit"
+                      :counter="50"
+                      required></v-text-field>
 
                     <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="livro.lancamento" transition="scale-transition" offset-y min-width="auto">
                       <template v-slot:activator="{ on, attrs }">
-                        <v-text-field v-model="livro.lancamento" label="Lançamento do Livro" append-icon="mdi-calendar" readonly v-bind="attrs" v-on="on" color="#004D40" :rules="[rules.required]"></v-text-field>
+                        <v-text-field
+                          v-model="livro.lancamento"
+                          label="Lançamento do Livro"
+                          append-icon="mdi-calendar"
+                          readonly
+                          v-bind="attrs"
+                          v-on="on"
+                          color="#004D40"
+                          :rules="[rules.required]"></v-text-field>
                       </template>
                       <v-date-picker v-model="livro.lancamento" scrollable :max="date" color="#004D40" locale="pt-br">
                         <v-spacer></v-spacer>
@@ -30,7 +63,14 @@
                       </v-date-picker>
                     </v-menu>
 
-                    <v-text-field :rules="[rules.required, rules.minQuant]" label="Quantidade do Livro" type="number" color="#004D40" v-model="livro.quantidade" append-icon="mdi-numeric" required></v-text-field>
+                    <v-text-field
+                      :rules="[rules.required, rules.minQuant]"
+                      label="Quantidade do Livro"
+                      type="number"
+                      color="#004D40"
+                      v-model="livro.quantidade"
+                      append-icon="mdi-numeric"
+                      required></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-divider></v-divider>
@@ -57,8 +97,7 @@
             :search="search"
             loading="items"
             loading-text="Carregando dados... Aguarde!"
-            no-results-text="Nenhum livro encontrado"
-          >
+            no-results-text="Nenhum livro encontrado">
             <template v-slot:[`item.lancamento`]="{ item }">
               <v-card elevation="0">
                 <v-card-text style="font-family: arial; color: black">

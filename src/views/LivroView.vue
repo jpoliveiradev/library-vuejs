@@ -95,7 +95,7 @@
               itemsPerPageText: 'Linhas por página',
             }"
             :search="search"
-            loading="items"
+            loading="#004D40"
             loading-text="Carregando dados... Aguarde!"
             no-results-text="Nenhum livro encontrado">
             <template v-slot:[`item.lancamento`]="{ item }">

@@ -96,7 +96,8 @@
               itemsPerPageText: 'Linhas por página',
             }"
             :search="search"
-            loading="items"
+            loading="#004D40"
+            loading-color="green"
             loading-text="Carregando dados... Aguarde!"
             no-results-text="Nenhum cliente encontrado">
             <template v-slot:[`item.dataAluguel`]="{ item }">
@@ -254,11 +255,13 @@ export default {
           this.aluguel = { ...aluguel };
           this.aluguel.dataDevolucao = this.date;
           Aluguel.atualizar(this.aluguel).then(() => {
+            this.aluguel = {};
             this.$swal("Livro Devolvido com Sucesso!", "", "success");
             this.listar();
           });
         } else {
           this.$swal("Livro não Devolvido", "", "info");
+          this.listar();
         }
       });
     },

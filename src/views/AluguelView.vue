@@ -17,24 +17,25 @@
                   <v-form class="px-2" ref="form" lazy-validation>
                     <v-select
                       v-model="aluguel.livroId"
-                      :rules="[rules.required]"
                       :items="livros"
                       item-text="nomeLivro"
                       item-value="id"
                       label="Nome do Livro"
                       color="#004D40"
                       append-icon="mdi-book-open-page-variant"
-                      required></v-select>
+                      :rules="[rules.required]">
+                    </v-select>
                     <v-select
                       v-model="aluguel.clienteId"
-                      :rules="[rules.required]"
                       :items="clientes"
                       item-text="nomeUsuario"
                       item-value="id"
                       label="Nome do Cliente"
                       color="#004D40"
                       append-icon="mdi-account"
-                      required></v-select>
+                      :rules="[rules.required]"
+                      required>
+                    </v-select>
                     <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="aluguel.dataAluguel" transition="scale-transition" offset-y min-width="auto">
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
@@ -96,46 +97,19 @@
               itemsPerPageText: 'Linhas por página',
             }"
             :search="search"
-            loading="#004D40"
-            loading-color="green"
+            :loading="loading"
             loading-text="Carregando dados... Aguarde!"
             no-results-text="Nenhum cliente encontrado">
-            <template v-slot:[`item.dataAluguel`]="{ item }">
-              <v-card elevation="0">
-                <v-card-text style="font-family: arial; color: black">
-                  <span>{{ dateFormatBr1(item.dataAluguel) }}</span>
-                </v-card-text>
-              </v-card>
-            </template>
-
-            <template v-slot:[`item.dataPrevisao`]="{ item }">
-              <v-card elevation="0">
-                <v-card-text style="font-family: arial; color: black">
-                  <span>{{ dateFormatBr2(item.dataPrevisao) }}</span>
-                </v-card-text>
-              </v-card>
-            </template>
-
             <template v-slot:[`item.dataDevolucao`]="{ item }">
-              <v-card elevation="0">
-                <v-card-text style="font-family: arial; color: black">
-                  <v-chip :color="getColor(item.dataDevolucao, item.dataPrevisao)" dark>
-                    {{
-                      item.dataDevolucao
-                        ? item.dataDevolucao > item.dataPrevisao
-                          ? `${dateFormatBr3(item.dataDevolucao)} (Com atraso)`
-                          : `${dateFormatBr3(item.dataDevolucao)} (No prazo)`
-                        : "Não devolvido"
-                    }}
-                  </v-chip>
-                </v-card-text>
-              </v-card>
+              <v-chip :color="getColor(item.dataDevolucao, item.dataPrevisao)" dark>
+                {{ item.dataDevolucao }}
+              </v-chip>
             </template>
 
             <template v-slot:[`item.acoes`]="{ item }">
               <v-tooltip top color="#F57F17">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn v-if="!item.dataDevolucao" x-large v-bind="attrs" v-on="on" color="#F57F17" text @click="devolver(item)">
+                  <v-btn v-if="item.dataDevolucao == 'Não Devolvido'" x-large v-bind="attrs" v-on="on" color="#F57F17" text @click="devolver(item)">
                     <v-icon> mdi-book-check </v-icon>
                   </v-btn>
                 </template>
@@ -143,7 +117,7 @@
               </v-tooltip>
               <v-tooltip top color="red">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn v-if="item.dataDevolucao" v-bind="attrs" v-on="on" class="mx-2" elevation="1" fab x-small color="error" @click="remover(item)">
+                  <v-btn v-if="item.dataDevolucao != 'Não Devolvido'" v-bind="attrs" v-on="on" class="mx-2" elevation="1" fab x-small color="error" @click="remover(item)">
                     <v-icon> mdi-delete </v-icon>
                   </v-btn>
                 </template>
@@ -184,6 +158,7 @@ export default {
       menu: false,
       modal: false,
       menu2: false,
+      loading: (true, "#004D40"),
       dialog: false,
       titleModal: "",
       aluguel: {
@@ -208,6 +183,30 @@ export default {
     listar() {
       Aluguel.listar().then((resposta) => {
         this.alugueis = resposta.data;
+
+        this.alugueis.forEach((a) => {
+          return (a.dataAluguel = moment(a.dataAluguel).format("YYYY-MM-DD"));
+        });
+
+        this.alugueis.forEach((a) => {
+          if (a.dataDevolucao <= a.dataPrevisao) {
+            return (a.dataDevolucao = moment(a.dataDevolucao).format("YYYY-MM-DD") + " (No Prazo)");
+          }
+          //
+          else if (a.dataDevolucao > a.dataPrevisao) {
+            return (a.dataDevolucao = moment(a.dataDevolucao).format("YYYY-MM-DD") + "  (Com atraso)");
+          }
+          //
+          else {
+            return (a.dataDevolucao = "Não Devolvido");
+          }
+        });
+        this.alugueis.forEach((a) => {
+          return (a.dataPrevisao = moment(a.dataPrevisao).format("YYYY-MM-DD"));
+        });
+        this.loading = false;
+        // this.ultimoAluguel=this.alugueis[this.alugueis.length - 1];
+        // console.log(this.ultimoAluguel)
       });
     },
     listarLivro() {
@@ -225,16 +224,16 @@ export default {
         if (!this.aluguel.id) {
           Aluguel.salvar(this.aluguel)
             .then(() => {
+              this.$refs.form.resetValidation();
               this.aluguel = {};
               this.dialog = false;
-              this.$refs.form.resetValidation();
               this.$swal("Livro Alugado com Sucesso", "", "success");
               this.listar();
             })
             .catch((e) => {
               this.aluguel = {};
-              this.dialog = false;
               this.$refs.form.resetValidation();
+              this.dialog = false;
               this.$swal({ title: "Erro ao Alugar Livro", text: e.response.data, icon: "error" });
               this.listar();
             });
@@ -290,19 +289,13 @@ export default {
       this.aluguel = {};
       this.$refs.form.resetValidation();
     },
-    dateFormatBr1(dataAluguel) {
-      return moment(dataAluguel).format("DD/MM/YYYY");
-    },
-    dateFormatBr2(dataPrevisao) {
-      return moment(dataPrevisao).format("DD/MM/YYYY");
-    },
-    dateFormatBr3(dataDevolucao) {
-      return moment(dataDevolucao).format("DD/MM/YYYY");
-    },
     getColor(dataDevolucao, dataPrevisao) {
-      if (dataDevolucao == null) return "orange";
+      if (dataDevolucao == "Não Devolvido") {
+        return "orange";
+      }
+      moment.suppressDeprecationWarnings = true;
+      if ((dataDevolucao = moment(dataDevolucao).format("YYYY-MM-DD")) <= dataPrevisao) return "green";
       else if (dataDevolucao > dataPrevisao) return "red";
-      else return "green";
     },
   },
 };

@@ -16,9 +16,30 @@
                 </v-card-title>
                 <v-card-text>
                   <v-form class="px-2" ref="form" lazy-validation>
-                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Nome do Cliente" color="#004D40" v-model="cliente.nomeUsuario" append-icon="mdi-account" :counter="50" required></v-text-field>
-                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Endereço do Cliente" color="#004D40" v-model="cliente.endereco" append-icon="mdi-home-city" :counter="50" required></v-text-field>
-                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Cidade do Cliente" color="#004D40" v-model="cliente.cidade" append-icon="mdi-city" :counter="50" required></v-text-field>
+                    <v-text-field
+                      :rules="[rules.required, rules.maxValue, rules.minValue]"
+                      label="Nome do Cliente"
+                      color="#004D40"
+                      v-model="cliente.nomeUsuario"
+                      append-icon="mdi-account"
+                      :counter="50"
+                      required></v-text-field>
+                    <v-text-field
+                      :rules="[rules.required, rules.maxValue, rules.minValue]"
+                      label="Endereço do Cliente"
+                      color="#004D40"
+                      v-model="cliente.endereco"
+                      append-icon="mdi-home-city"
+                      :counter="50"
+                      required></v-text-field>
+                    <v-text-field
+                      :rules="[rules.required, rules.maxValue, rules.minValue]"
+                      label="Cidade do Cliente"
+                      color="#004D40"
+                      v-model="cliente.cidade"
+                      append-icon="mdi-city"
+                      :counter="50"
+                      required></v-text-field>
                     <v-text-field :rules="[rules.required, rules.email]" label="Email do Cliente" color="#004D40" v-model="cliente.email" append-icon="mdi-email" :counter="50" required></v-text-field>
                   </v-form>
                 </v-card-text>
@@ -44,10 +65,9 @@
               itemsPerPageText: 'Linhas por página',
             }"
             :search="search"
-            loading="#004D40"
+            :loading="loading"
             loading-text="Carregando dados... Aguarde!"
-            no-results-text="Nenhum cliente encontrado"
-          >
+            no-results-text="Nenhum cliente encontrado">
             <template v-slot:[`item.acoes`]="{ item }">
               <v-tooltip top color="#004D40">
                 <template v-slot:activator="{ on, attrs }">
@@ -87,7 +107,8 @@ export default {
         required: (value) => !!value || "Este campo é obrigatório.",
         maxValue: (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
         minValue: (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
-        email: (value) => /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value) || "Email Inválido.",
+        email: (value) =>
+          /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value) || "Email Inválido.",
       },
       headers: [
         { text: "Id", value: "id", class: "text-md-body-1 font-weight-bold black--text" },
@@ -97,6 +118,7 @@ export default {
         { text: "Email", value: "email", class: "text-md-body-1 font-weight-bold black--text" },
         { text: "Ações", value: "acoes", class: "text-md-body-1 font-weight-bold black--text", sortable: false },
       ],
+      loading: (true, "#004D40"),
       dialog: false,
       titleModal: "",
       cliente: {
@@ -116,6 +138,7 @@ export default {
     listar() {
       Cliente.listar().then((resposta) => {
         this.clientes = resposta.data;
+        this.loading = false;
       });
     },
     salvar() {

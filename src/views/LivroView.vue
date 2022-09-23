@@ -95,16 +95,16 @@
               itemsPerPageText: 'Linhas por página',
             }"
             :search="search"
-            loading="#004D40"
+            :loading="loading"
             loading-text="Carregando dados... Aguarde!"
             no-results-text="Nenhum livro encontrado">
-            <template v-slot:[`item.lancamento`]="{ item }">
+            <!-- <template v-slot:[`item.lancamento`]="{ item }">
               <v-card elevation="0">
                 <v-card-text style="font-family: arial; color: black">
                   <span>{{ dateFormatBr(item.lancamento) }}</span>
                 </v-card-text>
               </v-card>
-            </template>
+            </template> -->
             <template v-slot:[`item.quantidade`]="{ item }">
               <v-chip :color="getColor(item.quantidade)" dark>
                 {{ item.quantidade }}
@@ -166,6 +166,7 @@ export default {
       modal: false,
       menu2: false,
       nowDate: new Date().toISOString().slice(0, 10),
+      loading: (true, "#004D40"),
       dialog: false,
       titleModal: "",
       livro: {
@@ -179,6 +180,7 @@ export default {
       },
       livros: [],
       editoras: [],
+      dateF: [],
     };
   },
   mounted() {
@@ -188,6 +190,15 @@ export default {
     listar() {
       Livro.listar().then((resposta) => {
         this.livros = resposta.data;
+
+        this.livros.forEach((a) => {
+          // this.dateF = moment(a.lancamento).format("DD/MM/YYYY");
+          this.dateF = moment(a.lancamento).format("YYYY-MM-DD");
+          return (a.lancamento = this.dateF);
+          // console.log(a.lancamento);
+          // console.log(this.dateF );
+        });
+        this.loading = false;
       });
     },
     listarEditora() {
@@ -222,8 +233,9 @@ export default {
       this.titleModal = "Editar Livro";
       this.dialog = true;
       this.livro = { ...livro };
-      var dateFormat = moment(this.livro.lancamento).format("YYYY-MM-DD");
-      this.livro.lancamento = dateFormat;
+      // var dateFormat = moment(this.livro.lancamento).format("YYYY-MM-DD");
+      // console.log(this.livro);
+      // this.livro.lancamento = moment(this.livro.lancamento).format("YYYY-MM-DD");
     },
     atualizar() {
       Livro.atualizar(this.livro)
@@ -273,7 +285,15 @@ export default {
     },
     close() {
       this.dialog = false;
-      this.livro = {};
+      this.livro = {
+        id: "",
+        nomeLivro: "",
+        autor: "",
+        editoraId: "",
+        editora: "",
+        lancamento: "",
+        quantidade: "",
+      };
       this.$refs.form.resetValidation();
     },
 
@@ -282,9 +302,9 @@ export default {
       else if (quantidade >= 1) return "orange";
       else return "red";
     },
-    dateFormatBr(lancamento) {
-      return moment(lancamento).format("DD/MM/YYYY");
-    },
+    // dateFormatBr(lancamento) {
+    //   return moment(lancamento).format("DD/MM/YYYY");
+    // },
   },
 };
 </script>

@@ -6,9 +6,13 @@ import store from "./store";
 import vuetify from "./plugins/vuetify";
 import VueSweetalert2 from "vue-sweetalert2";
 import "sweetalert2/dist/sweetalert2.min.css";
+import VueApexCharts from "vue-apexcharts";
+
+Vue.use(VueApexCharts);
 
 Vue.use(VueSweetalert2);
 
+Vue.component('apexchart', VueApexCharts)
 
 Vue.config.productionTip = false;
 

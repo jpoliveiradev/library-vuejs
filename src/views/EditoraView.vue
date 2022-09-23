@@ -16,8 +16,22 @@
                 </v-card-title>
                 <v-card-text>
                   <v-form class="px-2" ref="form" lazy-validation>
-                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Nome da Editora" color="#004D40" v-model="editora.nomeEditora" append-icon="mdi-bookshelf" :counter="50" required></v-text-field>
-                    <v-text-field :rules="[rules.required, rules.maxValue, rules.minValue]" label="Cidade da Editora" color="#004D40" v-model="editora.cidade" append-icon="mdi-city" :counter="50" required></v-text-field>
+                    <v-text-field
+                      :rules="[rules.required, rules.maxValue, rules.minValue]"
+                      label="Nome da Editora"
+                      color="#004D40"
+                      v-model="editora.nomeEditora"
+                      append-icon="mdi-bookshelf"
+                      :counter="50"
+                      required></v-text-field>
+                    <v-text-field
+                      :rules="[rules.required, rules.maxValue, rules.minValue]"
+                      label="Cidade da Editora"
+                      color="#004D40"
+                      v-model="editora.cidade"
+                      append-icon="mdi-city"
+                      :counter="50"
+                      required></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-divider></v-divider>
@@ -41,10 +55,9 @@
               itemsPerPageText: 'Linhas por página',
             }"
             :search="search"
-            loading="#004D40"
+            :loading="loading"
             loading-text="Carregando dados... Aguarde!"
-            no-results-text="Nenhuma Editora encontrada"
-          >
+            no-results-text="Nenhuma Editora encontrada">
             <template v-slot:[`item.acoes`]="{ item }">
               <v-tooltip top color="#004D40">
                 <template v-slot:activator="{ on, attrs }">
@@ -90,6 +103,7 @@ export default {
         { text: "Ações", value: "acoes", class: "text-md-body-1 font-weight-bold black--text", sortable: false },
       ],
       dialog: false,
+      loading: (true, "#004D40"),
       titleModal: "",
       editora: { id: "", nomeEditora: "", cidade: "" },
       editoras: [],
@@ -102,6 +116,7 @@ export default {
     listar() {
       Editora.listar().then((resposta) => {
         this.editoras = resposta.data;
+        this.loading = false;
       });
     },
     salvar() {

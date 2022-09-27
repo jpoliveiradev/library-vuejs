@@ -153,7 +153,7 @@ export default {
         password: (value) => !!value || "Password é obrigatório.",
         maxValue: (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
         minValue: (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
-        minPassword: (value) => (value && value.length >= 3) || "Mínimo 4 caracteres",
+        minPassword: (value) => (value && value.length >= 4) || "Mínimo 4 caracteres",
         confirmPassword: (value) => value == this.admin.password || "A confirmação da senha não corresponde.",
         email: (value) =>
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value) || "Email Inválido.",

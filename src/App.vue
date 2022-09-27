@@ -1,12 +1,11 @@
 <template>
   <v-app>
-    <NavBar />
+    <NavBar v-if="notIsLoginPage" />
     <v-main>
       <router-view />
     </v-main>
- 
-     <Footer></Footer>
-    
+
+    <Footer v-if="notIsLoginPage" />
   </v-app>
 </template>
 
@@ -23,12 +22,17 @@ export default {
   data: () => ({
     //
   }),
+  computed: {
+    notIsLoginPage() {
+      return this.$route.name != "login";
+    },
+  },
 };
 </script>
 
 <style>
 .v-main {
-  background-color: #06283D;
+  background-color: #06283d;
 }
 .app {
   font-family: Arial, Helvetica, sans-serif;

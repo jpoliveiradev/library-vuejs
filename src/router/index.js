@@ -5,11 +5,16 @@ import ClienteView from "../views/ClienteView.vue";
 import EditoraView from "../views/EditoraView.vue";
 import LivroView from "../views/LivroView.vue";
 import AluguelView from "../views/AluguelView.vue";
-import TesteView from "../views/TesteView.vue";
+import LoginView from "../views/LoginView.vue";
 
 Vue.use(VueRouter);
 
 const routes = [
+  {
+    path: "/login",
+    name: "login",
+    component: LoginView,
+  },
   {
     path: "/",
     name: "home",
@@ -35,17 +40,20 @@ const routes = [
     name: "alugueis",
     component: AluguelView,
   },
-  {
-    path: "/teste",
-    name: "teste",
-    component: TesteView,
-  },
 ];
 
 const router = new VueRouter({
   mode: "history",
   base: process.env.BASE_URL,
   routes,
+});
+
+router.beforeEach((to, from, next) => {
+  if (to.name !== "login" && !localStorage.getItem("authAdmin")) {
+    next({ name: "login" });
+  } else {
+    next();
+  }
 });
 
 export default router;

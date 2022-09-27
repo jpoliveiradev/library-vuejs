@@ -2,7 +2,7 @@
   <div class="app">
     <div class="d-flex flex-column align-center">
       <tbody>
-        <v-card elevation="3" style="border: 1px solid #004d40">
+        <v-card class="table" elevation="3" style="border: 1px solid #004d40">
           <v-card-title>
             <h3>Alugueis |</h3>
             <v-dialog v-model="dialog" persistent max-width="450px">
@@ -205,8 +205,6 @@ export default {
           return (a.dataPrevisao = moment(a.dataPrevisao).format("YYYY-MM-DD"));
         });
         this.loading = false;
-        // this.ultimoAluguel=this.alugueis[this.alugueis.length - 1];
-        // console.log(this.ultimoAluguel)
       });
     },
     listarLivro() {
@@ -224,9 +222,9 @@ export default {
         if (!this.aluguel.id) {
           Aluguel.salvar(this.aluguel)
             .then(() => {
-              this.$refs.form.resetValidation();
               this.aluguel = {};
               this.dialog = false;
+              this.$refs.form.resetValidation();
               this.$swal("Livro Alugado com Sucesso", "", "success");
               this.listar();
             })
@@ -251,10 +249,8 @@ export default {
         confirmButtonText: "Devolver!",
       }).then((resposta) => {
         if (resposta.isConfirmed) {
-          this.aluguel = { ...aluguel };
-          this.aluguel.dataDevolucao = this.date;
-          Aluguel.atualizar(this.aluguel).then(() => {
-            this.aluguel = {};
+          aluguel.dataDevolucao = this.date;
+          Aluguel.atualizar(aluguel).then(() => {
             this.$swal("Livro Devolvido com Sucesso!", "", "success");
             this.listar();
           });
@@ -303,10 +299,13 @@ export default {
 
 <style scoped>
 tbody {
+  width: 95%;
   margin: 30px;
   margin-top: 5px;
   margin-bottom: 5px;
-  width: 95%;
+}
+.table {
+  border-radius: 10px;
 }
 .v-data-table {
   margin-top: 10px;

@@ -23,11 +23,16 @@
         </v-col>
       </v-row>
       <v-spacer></v-spacer>
-      <div id="ultimoAluguel" style="display: inline-block;">
-      <BarChart />
-      <DoughnutChart />
-        <span> Ultimo aluguel</span>
-        <!-- <span>{{ livro.ultimoAluguel }}</span> -->
+      <div class="graficos" style="display: inline-block">
+        <BarChart />
+        <v-card id="teste" width="300">
+          <v-card-title class="mx-auto text-center"> <v-icon color="#004D40" size="30">mdi-book</v-icon><b>Último Livro alugado:</b> </v-card-title>
+          <v-card-text class="text-center">
+            <h3 style="color: #212121">{{ this.ultimoLivroAluguel }}</h3>
+          </v-card-text>
+        </v-card>
+
+        <DoughnutChart />
       </div>
     </v-container>
   </div>
@@ -53,9 +58,8 @@ export default {
       editoras: [],
       livros: [],
       alugueis: [],
-      // chartData: null,
-      // options: null,
-      // loaded: false,
+      ultimoAluguel: [],
+      ultimoLivroAluguel: [],
       lists: [
         {
           icon: "mdi-account",
@@ -84,20 +88,21 @@ export default {
     Cliente.listar().then((res) => {
       this.clientes = res.data;
       this.lists[0].count = this.clientes.length;
-    }),
-      Editora.listar().then((res) => {
-        this.editoras = res.data;
-        this.lists[1].count = this.editoras.length;
-      }),
-      Livro.listar().then((res) => {
-        this.livros = res.data;
-        this.lists[2].count = this.livros.length;
-        this.ultimoAluguel = this.alugueis[this.alugueis.length - 1];
-      }),
-      Aluguel.listar().then((res) => {
-        this.alugueis = res.data;
-        this.lists[3].count = this.alugueis.length;
-      });
+    });
+    Editora.listar().then((res) => {
+      this.editoras = res.data;
+      this.lists[1].count = this.editoras.length;
+    });
+    Livro.listar().then((res) => {
+      this.livros = res.data;
+      this.lists[2].count = this.livros.length;
+    });
+    Aluguel.listar().then((res) => {
+      this.alugueis = res.data;
+      this.lists[3].count = this.alugueis.length;
+      this.ultimoAluguel = this.alugueis[this.alugueis.length - 1];
+      this.ultimoLivroAluguel = this.ultimoAluguel.livro.nomeLivro;
+    });
   },
 };
 </script>
@@ -115,8 +120,13 @@ export default {
 .v-btn--fixed.v-btn--left {
   left: -26px !important;
 }
-/* #ultimoAluguel{
-  /* margin: 10px; 
-   margin-left: 30px;
-} */
+.graficos {
+  position: relative;
+}
+#teste {
+  position: absolute;
+  top: 35px;
+  display: inline-block;
+  border: 1px solid #004d40;
+}
 </style>

@@ -23,6 +23,14 @@ export default {
         dataLabels: {
           enabled: false,
         },
+        plotOptions: {
+          pie: {
+            expandOnClick: false,
+          },
+        },
+        fill: {
+          colors: ["#008FFB", "#d33", "#F9C80E"],
+        },
         title: {
           text: "Dados de Aluguéis de Livros",
           style: {
@@ -30,9 +38,7 @@ export default {
             color: "#000",
           },
         },
-        fill: {
-          colors: ["#008FFB", "#d33", "#F9C80E"],
-        },
+
         labels: ["No Prazo", "Com atraso", "Não Devolvidos"],
         noData: {
           text: "Carregando...",
@@ -41,10 +47,10 @@ export default {
           enabled: true,
         },
         legend: {
-          //   position: "right",
-          //   fontSize: "14px",
-          //   fontFamily: "Helvetica, Arial",
-          //   fontWeight: 500,
+          fontSize: "14px",
+          fontFamily: "Helvetica, Arial",
+          fontWeight: 500,
+
           markers: {
             fillColors: ["#008FFB", "#d33", "#F9C80E"],
           },
@@ -77,7 +83,6 @@ export default {
     updateChart() {
       Aluguel.listar().then((res) => {
         this.alugueis = res.data;
-        // this.chartSet = this.livros;
         this.alugueis.forEach((a) => {
           if (a.dataDevolucao != null && a.dataDevolucao <= a.dataPrevisao) {
             this.series[0]++;
@@ -94,22 +99,7 @@ export default {
           }
         });
         this.loading = false;
-        // this.series = [
-        //   {
-        //     name: this.chartSet[0].nomeLivro,
-        //     data: [this.chartSet[0].quantAlugado],
-        //   },
-        //   {
-        //     name: this.chartSet[1].nomeLivro,
-        //     data: [this.chartSet[1].quantAlugado],
-        //   },
-        //   {
-        //     name: this.chartSet[2].nomeLivro,
-        //     data: [this.chartSet[2].quantAlugado],
-        //   },
-        // ];
       });
-      // console.log(this.series);
     },
   },
 };
@@ -117,9 +107,8 @@ export default {
 
 <style scoped>
 #chart {
-   display: inline-block;
-   /* margin-left: 30px;   */
-   margin-right: 0;
-    /* margin-top: 0px;  */
+  display: inline-block;
+  position: relative;
+  top: 10px;
 }
 </style>

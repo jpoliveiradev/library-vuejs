@@ -2,12 +2,11 @@
   <div class="app">
     <div class="d-flex flex-column align-center">
       <tbody>
-        <v-card elevation="3" style="border: 1px solid #004d40">
+        <v-card elevation="3" class="table" style="border: 1px solid #004d40">
           <v-card-title>
             <h3>Clientes |</h3>
             <v-dialog v-model="dialog" persistent max-width="500px">
               <template v-slot:activator="{ on, attrs }">
-                <!-- <v-btn color="" dark class="novo mb-2" v-bind="attrs" v-on="on" rounded> Novo <span>+</span> </v-btn> -->
                 <v-btn slot="activator" @click="titleModal = 'Cadastrar Cliente'" class="novo mb-2" v-bind="attrs" v-on="on" color="#004D40" dark rounded> Novo <span>+</span> </v-btn>
               </template>
               <v-card>
@@ -90,8 +89,6 @@
         </v-card>
       </tbody>
     </div>
-
-    <!-- </v-dialog> -->
   </div>
 </template>
 
@@ -234,6 +231,9 @@ export default {
 tbody {
   margin: 30px;
   width: 70%;
+}
+.table {
+  border-radius: 10px;
 }
 .v-data-table {
   margin-top: 10px;

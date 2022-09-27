@@ -17,7 +17,6 @@ export default {
       livros: [],
       alugueis: [],
       chartSet: [],
-      // series: [{ data: [0, 0, 0] }],
       chartOptions: {
         chart: {
           name: "BarChart",
@@ -65,11 +64,6 @@ export default {
         fill: {
           colors: ["#008FFB", "#004D40", "#F9C80E"],
         },
-        // grid: {
-        //   column: {
-        //     colors: ["#F44336", "#3F51B5", "#9C27B0"],
-        //   },
-        // },
         xaxis: {
           type: "category",
           categories: ["Quantidade Total Alugado"],
@@ -88,7 +82,7 @@ export default {
       series: [
         {
           name: "",
-          data: [10, 10, 10],
+          data: [0, 0, 0],
         },
       ],
     };
@@ -119,17 +113,19 @@ export default {
           },
         ];
       });
-      // console.log(this.series);
     },
   },
 };
 </script>
 <style scoped>
-.grafico{
+.grafico {
   display: inline-block;
-  margin: 50px 110px 0 50px;
-  padding: 20px;
   width: 40%;
-  
+  position: relative;
+  bottom: 20px;
+  margin: 60px 110px 0 70px;
+  padding: 20px;
+  padding-bottom: 0px;
+  border-radius: 10px;
 }
 </style>

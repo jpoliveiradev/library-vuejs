@@ -2,7 +2,7 @@
   <div class="app">
     <div class="d-flex flex-column align-center">
       <tbody>
-        <v-card elevation="3" style="border: 1px solid #004d40">
+        <v-card elevation="3" class="table" style="border: 1px solid #004d40">
           <v-card-title>
             <h3>Livros |</h3>
             <v-dialog v-model="dialog" persistent max-width="450px">
@@ -192,11 +192,8 @@ export default {
         this.livros = resposta.data;
 
         this.livros.forEach((a) => {
-          // this.dateF = moment(a.lancamento).format("DD/MM/YYYY");
           this.dateF = moment(a.lancamento).format("YYYY-MM-DD");
           return (a.lancamento = this.dateF);
-          // console.log(a.lancamento);
-          // console.log(this.dateF );
         });
         this.loading = false;
       });
@@ -233,9 +230,6 @@ export default {
       this.titleModal = "Editar Livro";
       this.dialog = true;
       this.livro = { ...livro };
-      // var dateFormat = moment(this.livro.lancamento).format("YYYY-MM-DD");
-      // console.log(this.livro);
-      // this.livro.lancamento = moment(this.livro.lancamento).format("YYYY-MM-DD");
     },
     atualizar() {
       Livro.atualizar(this.livro)
@@ -313,6 +307,11 @@ tbody {
   margin: 30px;
   min-width: 85%;
 }
+
+.table {
+  border-radius: 10px;
+}
+
 .v-data-table {
   margin-top: 10px;
   margin-left: 20px;

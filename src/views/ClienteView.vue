@@ -15,31 +15,10 @@
                 </v-card-title>
                 <v-card-text>
                   <v-form class="px-2" ref="form" lazy-validation>
-                    <v-text-field
-                      :rules="[rules.required, rules.maxValue, rules.minValue]"
-                      label="Nome do Cliente"
-                      color="#004D40"
-                      v-model="cliente.nomeUsuario"
-                      append-icon="mdi-account"
-                      :counter="50"
-                      required></v-text-field>
-                    <v-text-field
-                      :rules="[rules.required, rules.maxValue, rules.minValue]"
-                      label="Endereço do Cliente"
-                      color="#004D40"
-                      v-model="cliente.endereco"
-                      append-icon="mdi-home-city"
-                      :counter="50"
-                      required></v-text-field>
-                    <v-text-field
-                      :rules="[rules.required, rules.maxValue, rules.minValue]"
-                      label="Cidade do Cliente"
-                      color="#004D40"
-                      v-model="cliente.cidade"
-                      append-icon="mdi-city"
-                      :counter="50"
-                      required></v-text-field>
-                    <v-text-field :rules="[rules.required, rules.email]" label="Email do Cliente" color="#004D40" v-model="cliente.email" append-icon="mdi-email" :counter="50" required></v-text-field>
+                    <v-text-field :rules="rules" label="Nome do Cliente" color="#004D40" v-model="cliente.nomeUsuario" append-icon="mdi-account" :counter="50" required></v-text-field>
+                    <v-text-field :rules="enderecoRules" label="Endereço do Cliente" color="#004D40" v-model="cliente.endereco" append-icon="mdi-home-city" :counter="50" required></v-text-field>
+                    <v-text-field :rules="rules" label="Cidade do Cliente" color="#004D40" v-model="cliente.cidade" append-icon="mdi-city" :counter="50" required></v-text-field>
+                    <v-text-field :rules="emailRules" label="Email do Cliente" color="#004D40" v-model="cliente.email" append-icon="mdi-email" :counter="50" required></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-divider></v-divider>
@@ -100,13 +79,25 @@ export default {
   data: () => {
     return {
       search: "",
-      rules: {
-        required: (value) => !!value || "Este campo é obrigatório.",
-        maxValue: (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
-        minValue: (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
-        email: (value) =>
+      rules: [
+        (value) => !!value || "Este campo é obrigatório.",
+        (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
+        (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
+        (value) => /^[a-zA-ZÀ-ú ]+$/.test(value) || "Campo com caracteres inválidos.",
+        (value) => /[a-zA-ZÀ-ú ]+$/.test(value) || "Campo com caracteres inválidos.",
+        (value) => /^[^-\s]/.test(value) || "Este campo não pode ter espaçamento no início.",
+      ],
+      enderecoRules: [
+        (value) => !!value || "Este campo é obrigatório.",
+        (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
+        (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
+        (value) => /^[^-\s]/.test(value) || "Este campo não pode ter espaçamento no início.",
+      ],
+      emailRules: [
+        (value) => !!value || "Este campo é obrigatório.",
+        (value) =>
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value) || "Email Inválido.",
-      },
+      ],
       headers: [
         { text: "Id", value: "id", class: "text-md-body-1 font-weight-bold black--text" },
         { text: "Nome", value: "nomeUsuario", class: "text-md-body-1 font-weight-bold black--text" },

@@ -16,21 +16,15 @@
                 <v-card-text>
                   <v-form class="px-2" ref="form" lazy-validation>
                     <v-text-field
-                      :rules="[rules.required, rules.maxValue, rules.minValue]"
+                      class="mb-2"
+                      :rules="rulesEditora"
                       label="Nome da Editora"
                       color="#004D40"
                       v-model="editora.nomeEditora"
                       append-icon="mdi-bookshelf"
                       :counter="50"
                       required></v-text-field>
-                    <v-text-field
-                      :rules="[rules.required, rules.maxValue, rules.minValue]"
-                      label="Cidade da Editora"
-                      color="#004D40"
-                      v-model="editora.cidade"
-                      append-icon="mdi-city"
-                      :counter="50"
-                      required></v-text-field>
+                    <v-text-field :rules="rulesEditora" label="Cidade da Editora" color="#004D40" v-model="editora.cidade" append-icon="mdi-city" :counter="50" required></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-divider></v-divider>
@@ -90,11 +84,14 @@ export default {
   data: () => {
     return {
       search: "",
-      rules: {
-        required: (value) => !!value || "Este campo é obrigatório.",
-        maxValue: (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
-        minValue: (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
-      },
+      rulesEditora: [
+        (value) => !!value || "Este campo é obrigatório.",
+        (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
+        (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
+        (value) => /^[a-zA-ZÀ-ú ]+$/.test(value) || "Campo com caracteres inválidos.",
+        (value) => /[a-zA-ZÀ-ú ]+$/.test(value) || "Campo com caracteres inválidos.",
+        (value) => /^[^-\s]/.test(value) || "Este campo não pode ter espaçamento no início.",
+      ],
       headers: [
         { text: "Id", value: "id", class: "text-md-body-1 font-weight-bold black--text" },
         { text: "Nome", value: "nomeEditora", class: "text-md-body-1 font-weight-bold black--text" },

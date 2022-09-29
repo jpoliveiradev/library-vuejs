@@ -16,7 +16,7 @@
                 <v-card-text>
                   <v-form class="px-2" ref="form" lazy-validation>
                     <v-text-field
-                      :rules="[rules.required, rules.maxValue, rules.minValue]"
+                      :rules="[rules.required, rules.maxValue, rules.minValue, rules.campoInvalido]"
                       label="Nome do Livro"
                       color="#004D40"
                       v-model="livro.nomeLivro"
@@ -36,7 +36,7 @@
                       required></v-select>
 
                     <v-text-field
-                      :rules="[rules.required, rules.maxValue, rules.minValue]"
+                      :rules="[rules.required, rules.maxValue, rules.minValue, rules.campoInvalido]"
                       label="Autor do Livro"
                       color="#004D40"
                       v-model="livro.autor"
@@ -98,13 +98,6 @@
             :loading="loading"
             loading-text="Carregando dados... Aguarde!"
             no-results-text="Nenhum livro encontrado">
-            <!-- <template v-slot:[`item.lancamento`]="{ item }">
-              <v-card elevation="0">
-                <v-card-text style="font-family: arial; color: black">
-                  <span>{{ dateFormatBr(item.lancamento) }}</span>
-                </v-card-text>
-              </v-card>
-            </template> -->
             <template v-slot:[`item.quantidade`]="{ item }">
               <v-chip :color="getColor(item.quantidade)" dark>
                 {{ item.quantidade }}
@@ -151,6 +144,7 @@ export default {
         maxValue: (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
         minValue: (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
         minQuant: (value) => (value && value >= 1) || "Mínimo 1 quantidade",
+        campoInvalido: (value) => /^[^-\s]/.test(value) || "Este campo não pode ter espaçamento no início.",
       },
       headers: [
         { text: "Id", value: "id", class: "text-md-body-1 font-weight-bold black--text" },
@@ -296,9 +290,6 @@ export default {
       else if (quantidade >= 1) return "orange";
       else return "red";
     },
-    // dateFormatBr(lancamento) {
-    //   return moment(lancamento).format("DD/MM/YYYY");
-    // },
   },
 };
 </script>

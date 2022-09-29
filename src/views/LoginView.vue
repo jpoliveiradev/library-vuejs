@@ -44,7 +44,7 @@
                       <v-form class="px-2" ref="form2" lazy-validation>
                         <v-text-field
                           v-model="admin.nomeAdmin"
-                          :rules="[rules.required, rules.maxValue, rules.minValue]"
+                          :rules="[rules.required, rules.maxValue, rules.minValue, rules.campoInvalido, rules.caractereInvalido]"
                           label="Nome"
                           outlined
                           dense
@@ -155,6 +155,8 @@ export default {
         minValue: (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
         minPassword: (value) => (value && value.length >= 4) || "Mínimo 4 caracteres",
         confirmPassword: (value) => value == this.admin.password || "A confirmação da senha não corresponde.",
+        campoInvalido: (value) => /^[^-\s]/.test(value) || "Este campo não pode ter espaçamento no início.",
+        caractereInvalido: (value) => /[a-zA-ZÀ-ú ]+$/.test(value) || "Campo com caracteres inválidos.",
         email: (value) =>
           /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/.test(value) || "Email Inválido.",
       },

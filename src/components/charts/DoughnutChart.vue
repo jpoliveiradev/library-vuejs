@@ -38,7 +38,7 @@ export default {
             color: "#000",
           },
         },
-
+        colors: ["#0077FF", "#DB2D2D", "#F9C80E"],
         labels: ["No Prazo", "Com atraso", "Não Devolvidos"],
         noData: {
           text: "Carregando...",

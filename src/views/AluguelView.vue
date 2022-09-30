@@ -7,7 +7,7 @@
             <h3>Alugueis |</h3>
             <v-dialog v-model="dialog" persistent max-width="450px">
               <template v-slot:activator="{ on, attrs }">
-                <v-btn slot="activator" @click="titleModal = 'Alugar Livro'" class="novo mb-2" v-bind="attrs" v-on="on" color="#004D40" dark rounded> Novo <span>+</span> </v-btn>
+                <v-btn slot="activator" @click="showModal()" class="novo mb-2" v-bind="attrs" v-on="on" color="#004D40" dark rounded> Novo <span>+</span> </v-btn>
               </template>
               <v-card>
                 <v-card-title>
@@ -33,8 +33,7 @@
                       label="Nome do Cliente"
                       color="#004D40"
                       append-icon="mdi-account"
-                      :rules="[rules.required]"
-                      required>
+                      :rules="[rules.required]">
                     </v-select>
                     <v-menu ref="menu" v-model="menu" :close-on-content-click="false" :return-value.sync="aluguel.dataAluguel" transition="scale-transition" offset-y min-width="auto">
                       <template v-slot:activator="{ on, attrs }">
@@ -59,7 +58,7 @@
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                           v-model="aluguel.dataPrevisao"
-                          label="Data de Aluguel"
+                          label="Data Previsão de Devolução"
                           append-icon="mdi-calendar"
                           readonly
                           v-bind="attrs"
@@ -177,7 +176,7 @@ export default {
     };
   },
   mounted() {
-    this.listar(), this.listarLivro(), this.listarCliente();
+    this.listar(), this.listarLivrosDisp(), this.listarCliente();
   },
   methods: {
     listar() {
@@ -207,14 +206,15 @@ export default {
         this.loading = false;
       });
     },
-    listarLivro() {
-      Livro.listar().then((resposta) => {
+    listarLivrosDisp() {
+      Livro.listarLivrosDisp().then((resposta) => {
         this.livros = resposta.data;
       });
     },
     listarCliente() {
       Cliente.listar().then((resposta) => {
         this.clientes = resposta.data;
+        this.$refs.form.resetValidation();
       });
     },
     salvar() {
@@ -222,18 +222,16 @@ export default {
         if (!this.aluguel.id) {
           Aluguel.salvar(this.aluguel)
             .then(() => {
-              this.aluguel = {};
-              this.dialog = false;
-              this.$refs.form.resetValidation();
-              this.$swal("Livro Alugado com Sucesso", "", "success");
               this.listar();
+              this.$swal("Livro Alugado com Sucesso", "", "success");
+              this.close();
             })
             .catch((e) => {
               this.aluguel = {};
               this.$refs.form.resetValidation();
+              this.listar();
               this.dialog = false;
               this.$swal({ title: "Erro ao Alugar Livro", text: e.response.data, icon: "error" });
-              this.listar();
             });
         }
       }
@@ -280,10 +278,20 @@ export default {
         }
       });
     },
+    showModal() {
+      this.titleModal = "Alugar Livro";
+      this.dialog = true;
+      this.aluguel = {};
+      this.$nextTick(() => {
+        this.$refs.form.resetValidation();
+      });
+    },
     close() {
       this.dialog = false;
       this.aluguel = {};
-      this.$refs.form.resetValidation();
+      this.$nextTick(() => {
+        this.$refs.form.resetValidation();
+      });
     },
     getColor(dataDevolucao, dataPrevisao) {
       if (dataDevolucao == "Não Devolvido") {

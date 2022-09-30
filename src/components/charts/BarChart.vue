@@ -92,7 +92,7 @@ export default {
   },
   methods: {
     updateChart() {
-      Livro.listar2().then((res) => {
+      Livro.listarMaisAlugados().then((res) => {
         this.livros = res.data;
         this.chartSet = this.livros;
         this.xaxis = {

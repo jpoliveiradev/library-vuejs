@@ -7,7 +7,7 @@
             <h3>Editoras |</h3>
             <v-dialog v-model="dialog" persistent max-width="400px">
               <template v-slot:activator="{ on, attrs }">
-                <v-btn slot="activator" @click="titleModal = 'Cadastrar Editora'" class="novo mb-2" v-bind="attrs" v-on="on" color="#004D40" dark rounded> Novo <span>+</span> </v-btn>
+                <v-btn slot="activator" @click="showModal()" class="novo mb-2" v-bind="attrs" v-on="on" color="#004D40" dark rounded> Novo <span>+</span> </v-btn>
               </template>
               <v-card>
                 <v-card-title>
@@ -24,7 +24,7 @@
                       append-icon="mdi-bookshelf"
                       :counter="50"
                       required></v-text-field>
-                    <v-text-field :rules="rulesEditora" label="Cidade da Editora" color="#004D40" v-model="editora.cidade" append-icon="mdi-city" :counter="50" required></v-text-field>
+                    <v-text-field :rules="rulesCidade" label="Cidade da Editora" color="#004D40" v-model="editora.cidade" append-icon="mdi-city" :counter="50" required></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-divider></v-divider>
@@ -85,6 +85,12 @@ export default {
     return {
       search: "",
       rulesEditora: [
+        (value) => !!value || "Este campo é obrigatório.",
+        (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
+        (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
+        (value) => /^[^-\s]/.test(value) || "Este campo não pode ter espaçamento no início.",
+      ],
+      rulesCidade: [
         (value) => !!value || "Este campo é obrigatório.",
         (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
         (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
@@ -153,6 +159,9 @@ export default {
         })
         .catch((e) => {
           this.$swal({ title: "Erro ao Atualizar Editora", text: e.response.data, icon: "error" });
+          this.dialog = false;
+          this.editora = {};
+          this.$refs.form.resetValidation();
         });
     },
     remover(id) {
@@ -178,6 +187,14 @@ export default {
         } else {
           this.$swal("Editora não Deletada", "", "info");
         }
+      });
+    },
+    showModal() {
+      this.titleModal = "Cadastrar Editora";
+      this.dialog = true;
+      this.editora = {};
+      this.$nextTick(() => {
+        this.$refs.form.resetValidation();
       });
     },
     close() {

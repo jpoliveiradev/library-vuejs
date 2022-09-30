@@ -7,7 +7,7 @@
             <h3>Livros |</h3>
             <v-dialog v-model="dialog" persistent max-width="450px">
               <template v-slot:activator="{ on, attrs }">
-                <v-btn slot="activator" @click="titleModal = 'Cadastrar Livro'" class="novo mb-2" v-bind="attrs" v-on="on" color="#004D40" dark rounded> Novo <span>+</span> </v-btn>
+                <v-btn slot="activator" @click="showModal()" class="novo mb-2" v-bind="attrs" v-on="on" color="#004D40" dark rounded> Novo <span>+</span> </v-btn>
               </template>
               <v-card>
                 <v-card-title>
@@ -271,17 +271,17 @@ export default {
         }
       });
     },
+    showModal() {
+      this.titleModal = "Cadastrar Livro";
+      this.dialog = true;
+      this.livro = {};
+      this.$nextTick(() => {
+        this.$refs.form.resetValidation();
+      });
+    },
     close() {
       this.dialog = false;
-      this.livro = {
-        id: "",
-        nomeLivro: "",
-        autor: "",
-        editoraId: "",
-        editora: "",
-        lancamento: "",
-        quantidade: "",
-      };
+      this.livro = {};
       this.$refs.form.resetValidation();
     },
 

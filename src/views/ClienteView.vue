@@ -177,6 +177,7 @@ export default {
             icon: "error",
           });
           this.dialog = false;
+          this.cliente = {};
           this.$refs.form.resetValidation();
         });
     },
@@ -207,6 +208,14 @@ export default {
         } else {
           this.$swal("Cliente não Deletado", "", "info");
         }
+      });
+    },
+    showModal() {
+      this.titleModal = "Cadastrar Cliente";
+      this.dialog = true;
+      this.cliente = {};
+      this.$nextTick(() => {
+        this.$refs.form.resetValidation();
       });
     },
     close() {

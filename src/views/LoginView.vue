@@ -38,7 +38,7 @@
             <v-window-item :value="2">
               <v-row>
                 <v-card-text class="mt-15">
-                  <h1 class="text-center">Cadastrar Administrador</h1>
+                  <h1 class="text-center">Cadastrar Usuário</h1>
                   <v-row align="center" justify="center">
                     <v-col cols="10" sm="8">
                       <v-form class="px-2" ref="form2" lazy-validation>
@@ -210,7 +210,7 @@ export default {
     salvar() {
       if (this.$refs.form2.validate()) {
         Admin.salvar(this.admin).then(() => {
-          this.$swal("Admin Cadastrado com Sucesso", "", "success");
+          this.$swal("Usuário Cadastrado com Sucesso", "", "success");
           this.admin = {};
           this.step--;
           this.$refs.form.resetValidation();

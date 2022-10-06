@@ -192,29 +192,46 @@ export default {
   mounted() {},
   methods: {
     verificarLogin() {
-      Admin.verificar(this.login).then((res) => {
-        this.admins = res.data;
-        if (res.data.length > 0) {
-          localStorage.setItem("authAdmin", JSON.stringify(this.admins));
-          this.$router.push({ name: "home" });
+      if (this.$refs.form1.validate()) {
+        Admin.verificar(this.login).then((res) => {
+          this.admins = res.data;
 
-          //
-        } else {
-          this.textAlert = "Username e/ou Password incorretos";
-          this.snackbar = true;
-          this.login = {};
-          this.$refs.form1.resetValidation();
-        }
-      });
+          if (this.admins.length > 0) {
+            this.admins.forEach((a) => {
+              if (this.login.username == a.userName && this.login.password == a.password) {
+                localStorage.setItem("authAdmin", JSON.stringify(this.admins));
+                this.$router.push({ name: "home" });
+              } else {
+                this.textAlert = "Username e/ou Password incorretos";
+                this.snackbar = true;
+                this.login = {};
+                this.$refs.form1.resetValidation();
+              }
+            });
+          } else {
+            this.textAlert = "Username e/ou Password incorretos";
+            this.snackbar = true;
+            this.login = {};
+            this.$refs.form1.resetValidation();
+          }
+        });
+      }
     },
     salvar() {
       if (this.$refs.form2.validate()) {
-        Admin.salvar(this.admin).then(() => {
-          this.$swal("Usuário Cadastrado com Sucesso", "", "success");
-          this.admin = {};
-          this.step--;
-          this.$refs.form.resetValidation();
-        });
+        Admin.salvar(this.admin)
+          .then(() => {
+            this.$swal("Usuário Cadastrado com Sucesso", "", "success");
+            this.admin = {};
+            this.step--;
+            this.$refs.form.resetValidation();
+          })
+          .catch((e) => {
+            this.admin = {};
+            this.confirmPassword = "";
+            this.$refs.form2.resetValidation();
+            this.$swal({ title: "Erro ao Atualizar Livro", text: e.response.data, icon: "error" });
+          });
       }
     },
     alterarPassword() {
@@ -223,7 +240,7 @@ export default {
           .then((res) => {
             this.admin = res.data;
             this.admin.password = this.mudarPassword.password;
-            if (this.admin.userName == this.mudarPassword.username) {
+            if (this.admin.userName === this.mudarPassword.username) {
               Admin.atualizarPassword(this.admin).then(() => {
                 this.$swal("Senha Recuperada com Sucesso", "", "success");
                 this.mudarPassword = {};

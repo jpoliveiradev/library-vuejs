@@ -123,7 +123,7 @@ export default {
   width: 40%;
   position: relative;
   bottom: 20px;
-  margin: 60px 110px 0 70px;
+  margin: 60px 80px 0 70px;
   padding: 20px;
   padding-bottom: 0px;
   border-radius: 10px;

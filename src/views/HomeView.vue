@@ -25,7 +25,7 @@
       <v-spacer></v-spacer>
       <div class="graficos" style="display: inline-block">
         <BarChart />
-        <v-card id="teste" width="300">
+        <v-card id="ultAluguel" width="300">
           <v-card-title class="mx-auto text-center"> <v-icon color="#004D40" size="30">mdi-book</v-icon><b>Último Livro alugado:</b> </v-card-title>
           <v-card-text class="text-center">
             <h3 style="color: #212121">{{ this.ultimoLivroAluguel }}</h3>
@@ -123,7 +123,7 @@ export default {
 .graficos {
   position: relative;
 }
-#teste {
+#ultAluguel {
   position: absolute;
   top: 35px;
   display: inline-block;

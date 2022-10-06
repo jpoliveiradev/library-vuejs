@@ -15,8 +15,8 @@
                 </v-card-title>
                 <v-card-text>
                   <v-form class="px-2" ref="form" lazy-validation>
-                    <v-text-field :rules="rules" label="Nome do Cliente" color="#004D40" v-model="cliente.nomeUsuario" append-icon="mdi-account" :counter="50" required></v-text-field>
-                    <v-text-field :rules="enderecoRules" label="Endereço do Cliente" color="#004D40" v-model="cliente.endereco" append-icon="mdi-home-city" :counter="50" required></v-text-field>
+                    <v-text-field :rules="nomeRules" label="Nome do Cliente" color="#004D40" v-model="cliente.nomeUsuario" append-icon="mdi-account" :counter="50" required></v-text-field>
+                    <v-text-field :rules="rules" label="Endereço do Cliente" color="#004D40" v-model="cliente.endereco" append-icon="mdi-home-city" :counter="50" required></v-text-field>
                     <v-text-field :rules="rules" label="Cidade do Cliente" color="#004D40" v-model="cliente.cidade" append-icon="mdi-city" :counter="50" required></v-text-field>
                     <v-text-field :rules="emailRules" label="Email do Cliente" color="#004D40" v-model="cliente.email" append-icon="mdi-email" :counter="50" required></v-text-field>
                   </v-form>
@@ -79,7 +79,7 @@ export default {
   data: () => {
     return {
       search: "",
-      rules: [
+      nomeRules: [
         (value) => !!value || "Este campo é obrigatório.",
         (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
         (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
@@ -87,7 +87,7 @@ export default {
         (value) => /[a-zA-ZÀ-ú ]+$/.test(value) || "Campo com caracteres inválidos.",
         (value) => /^[^-\s]/.test(value) || "Este campo não pode ter espaçamento no início.",
       ],
-      enderecoRules: [
+      rules: [
         (value) => !!value || "Este campo é obrigatório.",
         (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
         (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",

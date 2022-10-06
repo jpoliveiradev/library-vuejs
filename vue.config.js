@@ -4,4 +4,5 @@ module.exports = defineConfig({
     devtool: "source-map",
   },
   transpileDependencies: ["vuetify"],
+  
 });

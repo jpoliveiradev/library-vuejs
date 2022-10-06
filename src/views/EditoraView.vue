@@ -17,14 +17,14 @@
                   <v-form class="px-2" ref="form" lazy-validation>
                     <v-text-field
                       class="mb-2"
-                      :rules="rulesEditora"
+                      :rules="rules"
                       label="Nome da Editora"
                       color="#004D40"
                       v-model="editora.nomeEditora"
                       append-icon="mdi-bookshelf"
                       :counter="50"
                       required></v-text-field>
-                    <v-text-field :rules="rulesCidade" label="Cidade da Editora" color="#004D40" v-model="editora.cidade" append-icon="mdi-city" :counter="50" required></v-text-field>
+                    <v-text-field :rules="rules" label="Cidade da Editora" color="#004D40" v-model="editora.cidade" append-icon="mdi-city" :counter="50" required></v-text-field>
                   </v-form>
                 </v-card-text>
                 <v-divider></v-divider>
@@ -84,18 +84,10 @@ export default {
   data: () => {
     return {
       search: "",
-      rulesEditora: [
+      rules: [
         (value) => !!value || "Este campo é obrigatório.",
         (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
         (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
-        (value) => /^[^-\s]/.test(value) || "Este campo não pode ter espaçamento no início.",
-      ],
-      rulesCidade: [
-        (value) => !!value || "Este campo é obrigatório.",
-        (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
-        (value) => (value && value.length >= 3) || "Mínimo 3 caracteres",
-        (value) => /^[a-zA-ZÀ-ú ]+$/.test(value) || "Campo com caracteres inválidos.",
-        (value) => /[a-zA-ZÀ-ú ]+$/.test(value) || "Campo com caracteres inválidos.",
         (value) => /^[^-\s]/.test(value) || "Este campo não pode ter espaçamento no início.",
       ],
       headers: [

@@ -133,7 +133,6 @@
 import Livro from "../services/livros";
 import Editora from "../services/editoras";
 import moment from "moment";
-
 export default {
   name: "livros",
   data: () => {
@@ -186,6 +185,7 @@ export default {
         this.livros = resposta.data;
 
         this.livros.forEach((a) => {
+          console.log(a);
           this.dateF = moment(a.lancamento).format("YYYY-MM-DD");
           return (a.lancamento = this.dateF);
         });

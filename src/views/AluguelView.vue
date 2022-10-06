@@ -101,14 +101,14 @@
             no-results-text="Nenhum cliente encontrado">
             <template v-slot:[`item.dataDevolucao`]="{ item }">
               <v-chip :color="getColor(item.dataDevolucao, item.dataPrevisao)" dark>
-                {{ item.dataDevolucao }}
+                {{ item.dataDevolucao ? (item.dataDevolucao > item.dataPrevisao ? `${item.dataDevolucao} (Com atraso)` : `${item.dataDevolucao} (No prazo)`) : "Não devolvido" }}
               </v-chip>
             </template>
 
             <template v-slot:[`item.acoes`]="{ item }">
               <v-tooltip top color="#F57F17">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn v-if="item.dataDevolucao == 'Não Devolvido'" x-large v-bind="attrs" v-on="on" color="#F57F17" text @click="devolver(item)">
+                  <v-btn v-if="!item.dataDevolucao" x-large v-bind="attrs" v-on="on" color="#F57F17" text @click="devolver(item)">
                     <v-icon> mdi-book-check </v-icon>
                   </v-btn>
                 </template>
@@ -116,7 +116,7 @@
               </v-tooltip>
               <v-tooltip top color="red">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn v-if="item.dataDevolucao != 'Não Devolvido'" v-bind="attrs" v-on="on" class="mx-2" elevation="1" fab x-small color="error" @click="remover(item)">
+                  <v-btn v-if="item.dataDevolucao" v-bind="attrs" v-on="on" class="mx-2" elevation="1" fab x-small color="error" @click="remover(item)">
                     <v-icon> mdi-delete </v-icon>
                   </v-btn>
                 </template>
@@ -184,25 +184,21 @@ export default {
         this.alugueis = resposta.data;
 
         this.alugueis.forEach((a) => {
-          return (a.dataAluguel = moment(a.dataAluguel).format("YYYY-MM-DD"));
+          a.dataAluguel = this.parseDate(a.dataAluguel);
         });
 
         this.alugueis.forEach((a) => {
-          if (a.dataDevolucao <= a.dataPrevisao) {
-            return (a.dataDevolucao = moment(a.dataDevolucao).format("YYYY-MM-DD") + " (No Prazo)");
-          }
-          //
-          else if (a.dataDevolucao > a.dataPrevisao) {
-            return (a.dataDevolucao = moment(a.dataDevolucao).format("YYYY-MM-DD") + "  (Com atraso)");
-          }
-          //
-          else {
-            return (a.dataDevolucao = "Não Devolvido");
+          if (a.dataDevolucao == null) {
+            return null;
+          } else {
+            a.dataDevolucao = this.parseDate(a.dataDevolucao);
           }
         });
+
         this.alugueis.forEach((a) => {
-          return (a.dataPrevisao = moment(a.dataPrevisao).format("YYYY-MM-DD"));
+          a.dataPrevisao = this.parseDate(a.dataPrevisao);
         });
+        console.log(this.alugueis);
         this.loading = false;
       });
     },
@@ -214,8 +210,14 @@ export default {
     listarCliente() {
       Cliente.listar().then((resposta) => {
         this.clientes = resposta.data;
-        this.$refs.form.resetValidation();
       });
+    },
+    parseDate(date) {
+      return moment(date).format("DD/MM/yyyy");
+    },
+    parseDateISO(date) {
+      const [dd, mm, yyyy] = date.split("/");
+      return `${yyyy}-${mm}-${dd}`;
     },
     salvar() {
       if (this.$refs.form.validate()) {
@@ -247,6 +249,8 @@ export default {
         confirmButtonText: "Devolver!",
       }).then((resposta) => {
         if (resposta.isConfirmed) {
+          aluguel.dataAluguel = this.parseDateISO(aluguel.dataAluguel);
+          aluguel.dataPrevisao = this.parseDateISO(aluguel.dataPrevisao);
           aluguel.dataDevolucao = this.date;
           Aluguel.atualizar(aluguel).then(() => {
             this.$swal("Livro Devolvido com Sucesso!", "", "success");
@@ -294,11 +298,11 @@ export default {
       });
     },
     getColor(dataDevolucao, dataPrevisao) {
-      if (dataDevolucao == "Não Devolvido") {
+      if (dataDevolucao == null) {
         return "orange";
       }
       moment.suppressDeprecationWarnings = true;
-      if ((dataDevolucao = moment(dataDevolucao).format("YYYY-MM-DD")) <= dataPrevisao) return "green";
+      if (dataDevolucao <= dataPrevisao) return "green";
       else if (dataDevolucao > dataPrevisao) return "red";
     },
   },

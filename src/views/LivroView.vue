@@ -184,10 +184,8 @@ export default {
       Livro.listar().then((resposta) => {
         this.livros = resposta.data;
 
-        this.livros.forEach((a) => {
-          console.log(a);
-          this.dateF = moment(a.lancamento).format("YYYY-MM-DD");
-          return (a.lancamento = this.dateF);
+        this.livros.forEach((l) => {         
+          l.lancamento = this.parseDate(l.lancamento);
         });
         this.loading = false;
       });
@@ -196,6 +194,13 @@ export default {
       Editora.listar().then((resposta) => {
         this.editoras = resposta.data;
       });
+    },
+    parseDate(date) {
+      return moment(date).format('DD/MM/yyyy');
+    },
+    parseDateISO(date) {
+      const [dd, mm, yyyy] = date.split('/');
+      return `${yyyy}-${mm}-${dd}`
     },
     salvar() {
       if (this.$refs.form.validate()) {
@@ -224,6 +229,7 @@ export default {
       this.titleModal = "Editar Livro";
       this.dialog = true;
       this.livro = { ...livro };
+      this.livro.lancamento = this.parseDateISO(livro.lancamento);
     },
     atualizar() {
       Livro.atualizar(this.livro)

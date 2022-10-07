@@ -1,6 +1,6 @@
 <template>
   <div id="chart">
-    <apexchart v-if="!loading" type="pie" width="480" :options="chartOptions" :series="series"></apexchart>
+    <apexchart id="apexchart" v-if="!loading" type="pie" :options="chartOptions" :series="series"></apexchart>
   </div>
 </template>
 
@@ -17,7 +17,6 @@ export default {
       series: [0, 0, 0],
       chartOptions: {
         chart: {
-          width: 380,
           type: "pie",
         },
         dataLabels: {
@@ -110,5 +109,32 @@ export default {
   display: inline-block;
   position: relative;
   top: 10px;
+  left: 80px;
+  width: 450px;
+}
+
+@media (max-width: 1200px) {
+  #chart {
+    width: 350px;
+    left: 40px;
+  }
+}
+@media (max-width: 1100px) {
+  #chart {
+    width: 420px;
+    left: 200px;
+  }
+}
+@media (max-width: 1000px) {
+  #chart {
+    width: 450px;
+    left: 200px;
+  }
+}
+@media (max-width: 900px) {
+  #chart {
+    width:400px;
+    left: 150px;
+  }
 }
 </style>

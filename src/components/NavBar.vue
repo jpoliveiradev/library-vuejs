@@ -50,7 +50,7 @@ export default {
   methods: {
     logout() {
       localStorage.removeItem("authAdmin");
-      this.$router.push({name: 'login'})
+      this.$router.push({ name: "login" });
     },
   },
 };
@@ -60,19 +60,32 @@ export default {
 @import url("https://fonts.googleapis.com/css2?family=Philosopher:wght@400;700&display=swap");
 
 .title {
-  margin-left: 100px;
+  margin-left: 80px;
 }
 .title span {
   font-family: "Philosopher", sans-serif;
   font-weight: 700;
-  font-size: 1.9rem;
+  font-size: 1.8rem;
 }
-.v-btn {
-  font-size: 16px;
+.menu .v-btn {
+  margin-left: 5px;
+  max-width: 110px;
+  padding: 0 30px 0 30px;
 }
+.menu .v-btn span {
+  font-size: 14px;
+}
+
 .activated-btn {
   background-color: #062a6d !important;
   color: #fafafa;
   transition: all ease 0.3s;
+}
+
+@media (max-width: 900px) {
+  .title {
+  margin-left: 0px;
+}
+
 }
 </style>

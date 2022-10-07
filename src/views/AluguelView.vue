@@ -331,4 +331,14 @@ tbody {
   padding-left: 3px;
   font-size: 1.5rem;
 }
+
+@media (max-width: 1100px) {
+  tbody {
+    width: 100%;
+  }
+
+  .app {
+    margin: 20px 10px 10px 10px;
+  }
+}
 </style>

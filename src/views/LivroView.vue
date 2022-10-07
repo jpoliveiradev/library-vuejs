@@ -184,7 +184,7 @@ export default {
       Livro.listar().then((resposta) => {
         this.livros = resposta.data;
 
-        this.livros.forEach((l) => {         
+        this.livros.forEach((l) => {
           l.lancamento = this.parseDate(l.lancamento);
         });
         this.loading = false;
@@ -196,11 +196,11 @@ export default {
       });
     },
     parseDate(date) {
-      return moment(date).format('DD/MM/yyyy');
+      return moment(date).format("DD/MM/yyyy");
     },
     parseDateISO(date) {
-      const [dd, mm, yyyy] = date.split('/');
-      return `${yyyy}-${mm}-${dd}`
+      const [dd, mm, yyyy] = date.split("/");
+      return `${yyyy}-${mm}-${dd}`;
     },
     salvar() {
       if (this.$refs.form.validate()) {
@@ -302,7 +302,7 @@ export default {
 <style scoped>
 tbody {
   margin: 30px;
-  min-width: 85%;
+  width: 90%;
 }
 
 .table {
@@ -319,5 +319,16 @@ tbody {
 .novo span {
   padding-left: 3px;
   font-size: 1.5rem;
+}
+
+@media (max-width: 1100px) {
+  tbody {
+    width: 100%;
+  }
+ 
+  .app {
+    margin: 20px 30px 10px 30px;
+  }
+ 
 }
 </style>

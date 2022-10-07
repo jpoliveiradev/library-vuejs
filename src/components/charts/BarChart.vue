@@ -1,6 +1,6 @@
 <template>
   <div class="grafico" style="border: 1px solid #004d40">
-    <apexchart height="400" width="400" type="bar" :options="chartOptions" :series="series"></apexchart>
+    <apexchart height="400" type="bar" :options="chartOptions" :series="series"></apexchart>
   </div>
 </template>
 
@@ -28,7 +28,7 @@ export default {
         },
         plotOptions: {
           bar: {
-            columnWidth: "70%",
+            columnWidth: "90%",
           },
         },
         dataLabels: {
@@ -120,12 +120,32 @@ export default {
 <style scoped>
 .grafico {
   display: inline-block;
-  width: 40%;
+  width: 420px;
   position: relative;
   bottom: 20px;
-  margin: 60px 80px 0 70px;
-  padding: 20px;
+  margin: 60px 0 0 70px;
+  padding: 10px;
   padding-bottom: 0px;
   border-radius: 10px;
+}
+
+@media (max-width: 900px) {
+  .grafico {
+   width: 280px;
+   margin-right: 20px;
+   margin-left: 40px;
+}
+}
+@media (max-width: 1000px) {
+  .grafico {
+   width: 280px;
+   margin-right: 20px;
+}
+}
+@media (max-width: 1300px) {
+  .grafico {
+   width: 300px;
+   margin-right: 20px;
+}
 }
 </style>

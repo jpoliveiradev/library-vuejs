@@ -5,16 +5,16 @@
         <v-col cols="10" sm="12">
           <v-row class="px-10 mt-n6 ml-5">
             <v-col cols="10" sm="3" v-for="(list, idx) in lists" :key="idx">
-              <v-card align="center" color="#F9FAFC" class="rounded-circle border pt-5" width="150" height="150" flat>
-                <v-icon size="60" color="#004D40">
+              <v-card id="cards" align="center" color="#F9FAFC" class="rounded-circle border" flat>
+                <v-icon size="50" color="#004D40">
                   {{ list.icon }}
                 </v-icon>
 
-                <v-card-text class="blue-grey--text font-weight-bold text-lg-h6">
+                <v-card-text id="titles" class="blue-grey--text font-weight-bold text-lg-h6">
                   {{ list.title }}
                 </v-card-text>
 
-                <v-btn absolute color="#004D40" class="white--text" fab left top>
+                <v-btn id="quant" absolute color="#004D40" class="white--text" fab left top>
                   <h2>{{ list.count }}</h2>
                 </v-btn>
               </v-card>
@@ -25,14 +25,14 @@
       <v-spacer></v-spacer>
       <div class="graficos" style="display: inline-block">
         <BarChart />
-        <v-card id="ultAluguel" width="300">
+        <v-card id="ultAluguel">
           <v-card-title class="mx-auto text-center"> <v-icon color="#004D40" size="30">mdi-book</v-icon><b>Último Livro alugado:</b> </v-card-title>
           <v-card-text class="text-center">
             <h3 style="color: #212121">{{ this.ultimoLivroAluguel }}</h3>
           </v-card-text>
         </v-card>
-
         <DoughnutChart />
+        <span id="teste"></span>
       </div>
     </v-container>
   </div>
@@ -123,10 +123,88 @@ export default {
 .graficos {
   position: relative;
 }
+#cards {
+  width: 150px;
+  height: 150px;
+  padding-top: 25px;
+}
 #ultAluguel {
   position: absolute;
   top: 35px;
+  right: 20px;
   display: inline-block;
   border: 1px solid #004d40;
+  width: 320px;
+}
+@media (max-width: 1000px) {
+  #ultAluguel {
+    right: 20px;
+    display: inline-block;
+    padding: 20px;
+    width: 210px;
+  }
+  #quant {
+    padding: 10px;
+    width: 45px;
+    height: 45px;
+  }
+  .v-btn--absolute.v-btn--left,
+  .v-btn--fixed.v-btn--left {
+    left: -18px !important;
+  }
+  #cards {
+    width: 120px;
+    height: 120px;
+    padding: 10px;
+  }
+}
+@media (max-width: 1100px) {
+  #ultAluguel {
+    top: 200px;
+  }
+  #quant {
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+  }
+  .v-btn--absolute.v-btn--left,
+  .v-btn--fixed.v-btn--left {
+    left: -18px !important;
+  }
+  #cards {
+    width: 125px;
+    height: 125px;
+    padding-bottom: 100px;
+  }
+}
+@media (max-width: 1200px) {
+  #ultAluguel {
+    width: 250px;
+  }
+}
+
+@media (max-width: 900px) {
+  #ultAluguel {
+    width: 200px;
+    right: 10px;
+  }
+  #titles {
+    font-weight: bold;
+    font-size: 14px;
+  }
+  #quant {
+    padding: 10px;
+    width: 40px;
+    height: 40px;
+  }
+  .v-btn--absolute.v-btn--left,
+  .v-btn--fixed.v-btn--left {
+    left: -18px !important;
+  }
+  #cards {
+    width: 115px;
+    height: 115px;
+    padding: 5px 0 0 0;
+  }
 }
 </style>

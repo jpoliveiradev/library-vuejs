@@ -42,4 +42,11 @@ export default {
   padding: 30px;
   border-radius: 5px;
 }
+
+@media (max-width: 900px) {
+  .app {
+    margin: 20px 50px 10px 50px;
+  }
+}
+
 </style>

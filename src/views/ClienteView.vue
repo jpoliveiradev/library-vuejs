@@ -246,4 +246,15 @@ tbody {
   padding-left: 3px;
   font-size: 1.5rem;
 }
+
+@media (max-width: 1300px) {
+  tbody {
+    width: 90%;
+  }
+}
+ @media (max-width: 900px) {
+  tbody {
+    width: 100%;
+  }
+}
 </style>

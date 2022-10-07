@@ -200,7 +200,7 @@ export default {
 <style scoped>
 tbody {
   margin: 20px;
-  width: 60%;
+  width: 80%;
 }
 .table {
   border-radius: 10px;

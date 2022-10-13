@@ -101,14 +101,14 @@
             no-results-text="Nenhum cliente encontrado">
             <template v-slot:[`item.dataDevolucao`]="{ item }">
               <v-chip :color="getColor(item.dataDevolucao, item.dataPrevisao)" dark>
-                {{ item.dataDevolucao ? (item.dataDevolucao > item.dataPrevisao ? `${item.dataDevolucao} (Com atraso)` : `${item.dataDevolucao} (No prazo)`) : "Não devolvido" }}
+                {{ item.dataDevolucao }}
               </v-chip>
             </template>
 
             <template v-slot:[`item.acoes`]="{ item }">
               <v-tooltip top color="#F57F17">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn v-if="!item.dataDevolucao" x-large v-bind="attrs" v-on="on" color="#F57F17" text @click="devolver(item)">
+                  <v-btn v-if="item.dataDevolucao == 'Não Devolvido' " x-large v-bind="attrs" v-on="on" color="#F57F17" text @click="devolver(item)">
                     <v-icon> mdi-book-check </v-icon>
                   </v-btn>
                 </template>
@@ -116,7 +116,7 @@
               </v-tooltip>
               <v-tooltip top color="red">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn v-if="item.dataDevolucao" v-bind="attrs" v-on="on" class="mx-2" elevation="1" fab x-small color="error" @click="remover(item)">
+                  <v-btn v-if="item.dataDevolucao != 'Não Devolvido'" v-bind="attrs" v-on="on" class="mx-2" elevation="1" fab x-small color="error" @click="remover(item)">
                     <v-icon> mdi-delete </v-icon>
                   </v-btn>
                 </template>
@@ -182,23 +182,23 @@ export default {
     listar() {
       Aluguel.listar().then((resposta) => {
         this.alugueis = resposta.data;
-
         this.alugueis.forEach((a) => {
           a.dataAluguel = this.parseDate(a.dataAluguel);
         });
 
         this.alugueis.forEach((a) => {
-          if (a.dataDevolucao == null) {
-            return null;
-          } else {
+          if (a.dataDevolucao <= a.dataPrevisao) {
             a.dataDevolucao = this.parseDate(a.dataDevolucao);
+            return (a.dataDevolucao += " (No Prazo)");
+          } else if (a.dataDevolucao > a.dataPrevisao) {
+            return (a.dataDevolucao = this.parseDate(a.dataDevolucao) + "  (Com atraso)");
+          } else if (a.dataDevolucao == null) {
+            return (a.dataDevolucao = "Não Devolvido");
           }
         });
-
         this.alugueis.forEach((a) => {
           a.dataPrevisao = this.parseDate(a.dataPrevisao);
         });
-        console.log(this.alugueis);
         this.loading = false;
       });
     },
@@ -298,12 +298,20 @@ export default {
       });
     },
     getColor(dataDevolucao, dataPrevisao) {
-      if (dataDevolucao == null) {
+      if (dataDevolucao == "Não Devolvido") {
         return "orange";
       }
-      moment.suppressDeprecationWarnings = true;
-      if (dataDevolucao <= dataPrevisao) return "green";
-      else if (dataDevolucao > dataPrevisao) return "red";
+
+      dataDevolucao = dataDevolucao.split(" ", 1);
+      dataDevolucao[0] = this.parseDateISO(dataDevolucao[0]);
+      dataPrevisao = this.parseDateISO(dataPrevisao);
+    
+      if (dataDevolucao[0] > dataPrevisao) {
+        return "red";
+      } 
+      else if (dataDevolucao[0] <= dataPrevisao) {
+        return "green";
+      }
     },
   },
 };
@@ -339,6 +347,20 @@ tbody {
 
   .app {
     margin: 20px 10px 10px 10px;
+  }
+}
+@media (max-width: 1000px) {
+  tbody {
+    width: 100%;
+  }
+
+  .app {
+    margin: 20px 10px 20px 10px;
+  }
+
+  .v-data-table {
+    margin-top: 0;
+    margin-left: 0px;
   }
 }
 </style>

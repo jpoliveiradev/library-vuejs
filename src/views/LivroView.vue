@@ -321,14 +321,37 @@ tbody {
   font-size: 1.5rem;
 }
 
+@media (max-width: 1200px) {
+  tbody {
+    width: 100%;
+  }
+
+  .app {
+    margin: 20px 30px 10px 30px;
+  }
+}
 @media (max-width: 1100px) {
   tbody {
     width: 100%;
   }
- 
+
   .app {
     margin: 20px 30px 10px 30px;
   }
- 
+}
+
+@media (max-width: 1000px) {
+  tbody {
+    width: 100%;
+  }
+
+  .app {
+    margin: 20px 10px 20px 10px;
+  }
+
+  .v-data-table {
+    margin-top: 0;
+    margin-left: 0px;
+  }
 }
 </style>

@@ -141,7 +141,7 @@ export default {
     right: 20px;
     display: inline-block;
     padding: 20px;
-    width: 210px;
+    width: 200px;
   }
   #quant {
     padding: 10px;
@@ -160,7 +160,7 @@ export default {
 }
 @media (max-width: 1100px) {
   #ultAluguel {
-    top: 200px;
+    top: 160px;
   }
   #quant {
     padding: 10px;
@@ -179,7 +179,8 @@ export default {
 }
 @media (max-width: 1200px) {
   #ultAluguel {
-    width: 250px;
+    max-width: 250px;
+    right: 30px;
   }
 }
 

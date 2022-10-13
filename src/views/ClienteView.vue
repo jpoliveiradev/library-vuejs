@@ -257,4 +257,10 @@ tbody {
     width: 100%;
   }
 }
+@media (max-width: 1000px) {
+  .app {
+    margin: 20px 50px 10px 50px;
+  }
+}
+
 </style>

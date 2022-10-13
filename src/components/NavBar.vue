@@ -69,7 +69,7 @@ export default {
 }
 .menu .v-btn {
   margin-left: 5px;
-  max-width: 110px;
+  width: 110px;
   padding: 0 30px 0 30px;
 }
 .menu .v-btn span {
@@ -84,8 +84,13 @@ export default {
 
 @media (max-width: 900px) {
   .title {
-  margin-left: 0px;
-}
-
+    margin-left: 0px;
+  }
+  .menu .v-btn {
+    margin-left: 5px;
+    max-width: 100px;
+    padding: 0;
+    font-size: 5px;
+  }
 }
 </style>

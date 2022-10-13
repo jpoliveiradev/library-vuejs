@@ -115,8 +115,8 @@ export default {
 
 @media (max-width: 1200px) {
   #chart {
-    width: 350px;
-    left: 40px;
+    width: 420px;
+    left: 80px;
   }
 }
 @media (max-width: 1100px) {
@@ -133,8 +133,8 @@ export default {
 }
 @media (max-width: 900px) {
   #chart {
-    width:400px;
-    left: 150px;
+    width: 400px;
+    left: 200px;
   }
 }
 </style>

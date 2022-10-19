@@ -78,7 +78,6 @@ export default {
           },
         },
       },
-
       series: [
         {
           name: "",
@@ -131,21 +130,44 @@ export default {
 
 @media (max-width: 900px) {
   .grafico {
-   width: 280px;
-   margin-right: 20px;
-   margin-left: 40px;
-}
+    width: 420px;
+    margin-left: 150px;
+  }
 }
 @media (max-width: 1000px) {
   .grafico {
-   width: 280px;
-   margin-right: 20px;
+    width: 280px;
+    margin: 60px 0 0 30px;
+  }
 }
-}
-@media (max-width: 1300px) {
+@media (max-width: 1200px) {
   .grafico {
-   width: 300px;
-   margin-right: 20px;
+    width: 420px;
+    margin-left: 10px;
+    /* margin: 60px 0 0 30px; */
+  }
 }
+@media (max-width: 960px) {
+  .grafico {
+    width: 4200px;
+    /* margin-right: 20px; */
+  }
+}
+@media (max-width: 750px) {
+  .grafico {
+    max-width: 400px;
+    min-width: 300px;
+    margin-left: 0px;
+    margin-right: 10px;
+    /* margin-right: 600px; */
+  }
+}
+@media (max-width: 430px) {
+  .grafico {
+    max-width: 400px;
+    margin-left: 20px;
+    margin-right: 10px;
+    /* margin-right: 600px; */
+  }
 }
 </style>

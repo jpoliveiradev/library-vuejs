@@ -6,6 +6,8 @@ import EditoraView from "../views/EditoraView.vue";
 import LivroView from "../views/LivroView.vue";
 import AluguelView from "../views/AluguelView.vue";
 import LoginView from "../views/LoginView.vue";
+import teste from "../views/teste.vue";
+import NavBar from "../components/NavBar.vue";
 
 Vue.use(VueRouter);
 
@@ -39,6 +41,16 @@ const routes = [
     path: "/alugueis",
     name: "alugueis",
     component: AluguelView,
+  },
+  {
+    path: "/navbar",
+    name: "navbar",
+    component: NavBar,
+  },
+  {
+    path: "/teste",
+    name: "teste",
+    component: teste,
   },
 ];
 

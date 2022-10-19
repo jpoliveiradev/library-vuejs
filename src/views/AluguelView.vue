@@ -58,7 +58,7 @@
                       <template v-slot:activator="{ on, attrs }">
                         <v-text-field
                           v-model="aluguel.dataPrevisao"
-                          label="Data Previsão de Devolução"
+                          label="Previsão de Devolução"
                           append-icon="mdi-calendar"
                           readonly
                           v-bind="attrs"
@@ -79,7 +79,7 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="error" text @click="close"> Fechar </v-btn>
-                  <v-btn color="004D40" text @click="salvar"> Salvar </v-btn>
+                  <v-btn color="#004D40" text @click="salvar" :disabled="awaitAluguel"> Salvar </v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -87,7 +87,6 @@
             <v-text-field color="#004D40" v-model="search" append-icon="mdi-magnify" label="Pesquisar" single-line hide-details></v-text-field>
           </v-card-title>
           <v-data-table
-            class="elevation-1"
             :headers="headers"
             :items="alugueis"
             :items-per-page="5"
@@ -96,6 +95,7 @@
               itemsPerPageText: 'Linhas por página',
             }"
             :search="search"
+            :header-props="headerProps"
             :loading="loading"
             loading-text="Carregando dados... Aguarde!"
             no-results-text="Nenhum cliente encontrado">
@@ -108,7 +108,7 @@
             <template v-slot:[`item.acoes`]="{ item }">
               <v-tooltip top color="#F57F17">
                 <template v-slot:activator="{ on, attrs }">
-                  <v-btn v-if="item.dataDevolucao == 'Não Devolvido' " x-large v-bind="attrs" v-on="on" color="#F57F17" text @click="devolver(item)">
+                  <v-btn v-if="item.dataDevolucao == 'Não Devolvido'" x-large v-bind="attrs" v-on="on" color="#F57F17" text @click="devolver(item)">
                     <v-icon> mdi-book-check </v-icon>
                   </v-btn>
                 </template>
@@ -140,7 +140,11 @@ export default {
   name: "alugueis",
   data: () => {
     return {
+      headerProps: {
+        sortByText: "Ordenar Por",
+      },
       search: "",
+      awaitAluguel: true,
       rules: {
         required: (value) => !!value || "Este campo é obrigatório.",
       },
@@ -179,8 +183,9 @@ export default {
     this.listar(), this.listarLivrosDisp(), this.listarCliente();
   },
   methods: {
-    listar() {
-      Aluguel.listar().then((resposta) => {
+    async listar() {
+      this.awaitAluguel = true;
+      await Aluguel.listar().then((resposta) => {
         this.alugueis = resposta.data;
         this.alugueis.forEach((a) => {
           a.dataAluguel = this.parseDate(a.dataAluguel);
@@ -200,16 +205,21 @@ export default {
           a.dataPrevisao = this.parseDate(a.dataPrevisao);
         });
         this.loading = false;
+        this.awaitAluguel = false;
       });
     },
-    listarLivrosDisp() {
-      Livro.listarLivrosDisp().then((resposta) => {
+    async listarLivrosDisp() {
+      this.awaitAluguel = true;
+      await Livro.listarLivrosDisp().then((resposta) => {
         this.livros = resposta.data;
+        this.awaitAluguel = false;
       });
     },
-    listarCliente() {
-      Cliente.listar().then((resposta) => {
+    async listarCliente() {
+      this.awaitAluguel = true;
+      await Cliente.listar().then((resposta) => {
         this.clientes = resposta.data;
+        this.awaitAluguel = false;
       });
     },
     parseDate(date) {
@@ -219,14 +229,16 @@ export default {
       const [dd, mm, yyyy] = date.split("/");
       return `${yyyy}-${mm}-${dd}`;
     },
-    salvar() {
+    async salvar() {
+      this.awaitAluguel = true;
       if (this.$refs.form.validate()) {
         if (!this.aluguel.id) {
-          Aluguel.salvar(this.aluguel)
+          await Aluguel.salvar(this.aluguel)
             .then(() => {
               this.listar();
               this.$swal("Livro Alugado com Sucesso", "", "success");
               this.close();
+              this.awaitAluguel = false;
             })
             .catch((e) => {
               this.aluguel = {};
@@ -234,12 +246,13 @@ export default {
               this.listar();
               this.dialog = false;
               this.$swal({ title: "Erro ao Alugar Livro", text: e.response.data, icon: "error" });
+              this.awaitAluguel = false;
             });
         }
       }
     },
-    devolver(aluguel) {
-      this.$swal({
+    async devolver(aluguel) {
+      await this.$swal({
         title: "Você deseja devolver este livro?",
         icon: "warning",
         confirmButtonColor: "#004D40",
@@ -305,11 +318,10 @@ export default {
       dataDevolucao = dataDevolucao.split(" ", 1);
       dataDevolucao[0] = this.parseDateISO(dataDevolucao[0]);
       dataPrevisao = this.parseDateISO(dataPrevisao);
-    
+
       if (dataDevolucao[0] > dataPrevisao) {
         return "red";
-      } 
-      else if (dataDevolucao[0] <= dataPrevisao) {
+      } else if (dataDevolucao[0] <= dataPrevisao) {
         return "green";
       }
     },

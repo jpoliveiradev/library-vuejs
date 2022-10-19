@@ -28,16 +28,15 @@
                     <v-card-actions>
                       <v-spacer></v-spacer>
                       <v-btn color="error" text @click="close"> Fechar </v-btn>
-                      <v-btn color="#004D40" text @click="salvar" :disabled="awaitCliente"> Salvar </v-btn>
+                      <v-btn color="004D40" text @click="salvar"> Salvar </v-btn>
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
                 <v-spacer></v-spacer>
-                <v-row class="text-center">
-                  <v-col class="ml-5" cols="10"> <v-text-field color="#004D40" v-model="search" append-icon="mdi-magnify" label="Pesquisar" single-line hide-details></v-text-field></v-col>
-                </v-row>
+                <v-text-field color="#004D40" v-model="search" append-icon="mdi-magnify" label="Pesquisar" single-line hide-details></v-text-field>
               </v-card-title>
               <v-data-table
+                class="elevation-1"
                 :headers="headers"
                 :items="clientes"
                 :items-per-page="5"
@@ -46,7 +45,6 @@
                   itemsPerPageText: 'Linhas por página',
                 }"
                 :search="search"
-                :header-props="headerProps"
                 :loading="loading"
                 loading-text="Carregando dados... Aguarde!"
                 no-results-text="Nenhum cliente encontrado">
@@ -81,14 +79,10 @@
 import Cliente from "../services/clientes";
 
 export default {
-  name: "clientes",
+  name: "teste",
   data: () => {
     return {
-      headerProps: {
-        sortByText: "Ordenar Por",
-      },
       search: "",
-      awaitCliente: true,
       nomeRules: [
         (value) => !!value || "Este campo é obrigatório.",
         (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
@@ -114,7 +108,7 @@ export default {
         { text: "Endereço", value: "endereco", class: "text-md-body-1 font-weight-bold black--text" },
         { text: "Cidade", value: "cidade", class: "text-md-body-1 font-weight-bold black--text" },
         { text: "Email", value: "email", class: "text-md-body-1 font-weight-bold black--text" },
-        { text: "Ações", value: "acoes", class: "acoes text-md-body-1 mr-12 font-weight-bold black--text", sortable: false },
+        { text: "Ações", value: "acoes", class: "text-md-body-1 mr-12 font-weight-bold black--text", sortable: false },
       ],
       loading: (true, "#004D40"),
       dialog: false,
@@ -133,30 +127,22 @@ export default {
     this.listar();
   },
   methods: {
-    async listar() {
-      this.awaitCliente = true;
-      await Cliente.listar()
-        .then((resposta) => {
-          this.clientes = resposta.data;
-          this.loading = false;
-          this.awaitCliente = false;
-        })
-        .catch(() => {
-          this.awaitCliente = true;
-        });
+    listar() {
+      Cliente.listar().then((resposta) => {
+        this.clientes = resposta.data;
+        this.loading = false;
+      });
     },
-    async salvar() {
-      this.awaitCliente = true;
+    salvar() {
       if (this.$refs.form.validate()) {
         if (!this.cliente.id) {
-          await Cliente.salvar(this.cliente)
+          Cliente.salvar(this.cliente)
             .then(() => {
               this.cliente = {};
               this.dialog = false;
               this.$refs.form.resetValidation();
               this.$swal("Cliente Adicionado com Sucesso", "", "success");
               this.listar();
-              this.awaitCliente = false;
             })
             .catch((e) => {
               this.$swal({
@@ -167,7 +153,6 @@ export default {
               this.dialog = false;
               this.cliente = {};
               this.$refs.form.resetValidation();
-              this.awaitCliente = false;
             });
         } else {
           this.atualizar();
@@ -179,16 +164,15 @@ export default {
       this.dialog = true;
       this.cliente = { ...cliente };
     },
-    async atualizar() {
-      this.awaitCliente = true;
-      await Cliente.atualizar(this.cliente)
+    atualizar() {
+      Cliente.atualizar(this.cliente)
         .then(() => {
           this.cliente = {};
           this.dialog = false;
           this.$refs.form.resetValidation();
           this.$swal("Cliente Atualizado com Sucesso", "", "success");
+
           this.listar();
-          this.awaitCliente = false;
         })
         .catch((e) => {
           this.$swal({
@@ -199,11 +183,10 @@ export default {
           this.dialog = false;
           this.cliente = {};
           this.$refs.form.resetValidation();
-          this.awaitCliente = false;
         });
     },
-    async remover(id) {
-      await this.$swal({
+    remover(id) {
+      this.$swal({
         title: "Você deseja realmente apagar?",
         text: "Você não será capaz de reverter isso!",
         icon: "warning",
@@ -251,7 +234,7 @@ export default {
 <style scoped>
 tbody {
   margin: 30px;
-  width: 90%;
+  width: 70%;
 }
 .table {
   border-radius: 10px;
@@ -288,25 +271,10 @@ tbody {
   .app {
     margin: 20px 5px 5px 5px;
   }
-  .v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
-    padding: 10px;
-    font-size: 0.8rem;
-    padding-left: 8px;
-  }
 }
-@media (max-width: 940px) {
+@media (max-width: 830px) {
   .app {
     margin: 20px 10px 10px 10px;
-  }
-  .v-btn--fab.v-size--x-small {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    margin-bottom: 10px;
-    margin-left: 10px;
-    margin-right: 20px;
-    height: 30px;
-    width: 30px;
   }
 }
 @media (max-width: 750px) {
@@ -326,15 +294,7 @@ tbody {
   }
   .v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
     padding: 10px;
-    font-size: 0.8rem;
     padding-left: 8px;
-  }
-}
-@media (max-width: 720px) {
-  .v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
-    padding: 0px 0px;
-    margin: 10px;
-    font-size: 0.75rem;
   }
 }
 @media (max-width: 650px) {
@@ -342,29 +302,25 @@ tbody {
     width: 100%;
     margin: 10px;
   }
+  .v-btn--fab.v-size--x-small {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 30px;
+    width: 30px;
+  }
 }
 @media (max-width: 599px) {
   tbody {
     margin: 0px;
     width: 100%;
   }
-  .v-data-table {
-    margin-top: 0px;
-    margin-left: 7px;
-  }
   .v-data-table > .v-data-table__wrapper .v-data-table__mobile-row {
     height: initial;
     min-height: 29px;
-  }
-  .v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
-    font-size: 1rem;
-    padding-top: 0px;
-    padding-right: 50px;
-    padding-bottom: 0px;
-    padding-left: 50px;
-  }
-  .v-data-table > .v-data-table__wrapper > table > tbody > tr > td.acoes {
-    font-size: 3rem;
   }
   .v-data-table__mobile-row {
     display: flex;
@@ -373,11 +329,9 @@ tbody {
     align-items: center;
   }
   .v-btn--fab.v-size--x-small {
-    display: inline-block;
-    padding: 7px;
-    margin: 0;
-    height: 32px;
-    width: 32px;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 0px;
   }
 }
 </style>

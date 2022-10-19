@@ -2,9 +2,9 @@
   <div class="app">
     <v-container>
       <v-row>
-        <v-col cols="10" sm="12">
-          <v-row class="px-10 mt-n6 ml-5">
-            <v-col cols="10" sm="3" v-for="(list, idx) in lists" :key="idx">
+        <v-col class="d-none d-sm-flex" cols="12" sm="12" md="12" lg="12" xl="12">
+          <v-row class="px-12 mt-2 card-md">
+            <v-col cols="6" sm="6" md="3" lg="3" xl="3" v-for="(list, idx) in lists" :key="idx">
               <v-card id="cards" align="center" color="#F9FAFC" class="rounded-circle border" flat>
                 <v-icon size="50" color="#004D40">
                   {{ list.icon }}
@@ -21,19 +21,64 @@
             </v-col>
           </v-row>
         </v-col>
+        <v-col class="d-flex d-sm-none card-sm" cols="12">
+          <v-row class="px-10 mt-2">
+            <v-col cols="6" v-for="(list, idx) in lists" :key="idx">
+              <v-card id="cards" align="center" color="#F9FAFC" class="rounded-circle border" flat>
+                <v-icon size="40" color="#004D40">
+                  {{ list.icon }}
+                </v-icon>
+
+                <v-card-text id="titles" class="blue-grey--text font-weight-bold text-lg-h6">
+                  {{ list.title }}
+                </v-card-text>
+
+                <v-btn id="quant" absolute color="#004D40" class="white--text" fab left top>
+                  <h2>{{ list.count }}</h2>
+                </v-btn>
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-col>
       </v-row>
       <v-spacer></v-spacer>
-      <div class="graficos" style="display: inline-block">
-        <BarChart />
-        <v-card id="ultAluguel">
-          <v-card-title class="mx-auto text-center"> <v-icon color="#004D40" size="30">mdi-book</v-icon><b>Último Livro alugado:</b> </v-card-title>
-          <v-card-text class="text-center">
-            <h3 style="color: #212121">{{ this.ultimoLivroAluguel }}</h3>
-          </v-card-text>
-        </v-card>
-        <DoughnutChart />
-        <span id="teste"></span>
-      </div>
+      <v-row class="barChartRow">
+        <v-col class="d-none d-sm-flex" id="barChart" cols="12" sm="5" md="5" lg="6" xl="6">
+          <BarChart />
+        </v-col>
+        <v-col>
+          <v-row class="d-none d-sm-flex justify-center">
+            <v-col class="d-flex justify-center" id="ultAluguelCol" cols="12" sm="12" md="10" lg="8" xl="10">
+              <v-card id="ultAluguel" class="my-10">
+                <v-card-title class="mx-auto text-center"> <v-icon color="#004D40" size="30">mdi-book</v-icon><b>Último Livro alugado:</b> </v-card-title>
+                <v-card-text class="text-center">
+                  <h3 style="color: #212121">{{ this.ultimoLivroAluguel }}</h3>
+                </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col id="pieChart" cols="12" sm="12" md="12" lg="10" xl="10">
+              <DoughnutChart />
+            </v-col>
+          </v-row>
+
+          <v-col class="d-flex d-sm-none" id="barChart" cols="12" sm="5" md="5" lg="6" xl="6">
+            <BarChart />
+          </v-col>
+          <v-row class="d-flex d-sm-none row-xs">
+            <v-col class="d-flex justify-center" cols="12">
+              <v-card id="ultAluguel" class="my-10">
+                <v-card-title class="mx-auto text-center"> <v-icon color="#004D40" size="30">mdi-book</v-icon><b>Último Livro alugado:</b> </v-card-title>
+                <v-card-text class="text-center">
+                  <h3 style="color: #212121">{{ this.ultimoLivroAluguel }}</h3>
+                </v-card-text>
+              </v-card>
+            </v-col>
+            <v-col id="pieChart" cols="12">
+              <DoughnutChart />
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
@@ -118,7 +163,11 @@ export default {
 }
 .v-btn--absolute.v-btn--left,
 .v-btn--fixed.v-btn--left {
-  left: -26px !important;
+  left: -18px !important;
+}
+#quant {
+  width: 50px;
+  height: 50px;
 }
 .graficos {
   position: relative;
@@ -129,83 +178,106 @@ export default {
   padding-top: 25px;
 }
 #ultAluguel {
-  position: absolute;
-  top: 35px;
-  right: 20px;
   display: inline-block;
   border: 1px solid #004d40;
   width: 320px;
+  margin-left: 0;
 }
-@media (max-width: 1000px) {
-  #ultAluguel {
-    right: 20px;
-    display: inline-block;
-    padding: 20px;
-    width: 200px;
+@media (min-width: 950px) and (max-width: 1050px) {
+  #cards {
+    max-width: 130px;
+    max-height: 130px;
+    padding-top: 14px;
   }
+}
+@media (min-width: 760px) and (max-width: 959px) {
+  #ultAluguelCol {
+    display: flex;
+    justify-content: start;
+  }
+  .card-md {
+    padding-left: 109px !important;
+  }
+}
+@media (max-width: 980px) {
+  .app {
+    margin: 20px 10px 10px 10px;
+  }
+}
+@media (max-width: 1100px) {
+  #ultAluguel {
+    max-width: 300px;
+    margin-left: 10px;
+  }
+}
+@media (max-width: 600px) {
   #quant {
     padding: 10px;
     width: 45px;
     height: 45px;
   }
-  .v-btn--absolute.v-btn--left,
-  .v-btn--fixed.v-btn--left {
-    left: -18px !important;
-  }
-  #cards {
-    width: 120px;
-    height: 120px;
-    padding: 10px;
-  }
-}
-@media (max-width: 1100px) {
-  #ultAluguel {
-    top: 160px;
-  }
-  #quant {
-    padding: 10px;
-    width: 40px;
-    height: 40px;
-  }
-  .v-btn--absolute.v-btn--left,
-  .v-btn--fixed.v-btn--left {
-    left: -18px !important;
-  }
-  #cards {
-    width: 125px;
-    height: 125px;
-    padding-bottom: 100px;
-  }
-}
-@media (max-width: 1200px) {
-  #ultAluguel {
-    max-width: 250px;
-    right: 30px;
-  }
-}
 
-@media (max-width: 900px) {
-  #ultAluguel {
-    width: 200px;
-    right: 10px;
-  }
-  #titles {
-    font-weight: bold;
-    font-size: 14px;
-  }
-  #quant {
-    padding: 10px;
-    width: 40px;
-    height: 40px;
-  }
   .v-btn--absolute.v-btn--left,
   .v-btn--fixed.v-btn--left {
     left: -18px !important;
   }
   #cards {
-    width: 115px;
-    height: 115px;
-    padding: 5px 0 0 0;
+    max-width: 120px;
+    max-height: 120px;
+    padding-top: 14px;
+  }
+  .card-sm {
+    padding-left: 60px !important;
+  }
+}
+@media (max-width: 580px) {
+  .card-sm {
+    padding-left: 20px !important;
+  }
+}
+@media (max-width: 500px) {
+  #cards {
+    margin-right: 180px;
+    margin-left: 0px;
+  }
+  .card-sm {
+    padding-left: 10px !important;
+  }
+}
+@media (max-width: 430px) {
+  #cards {
+    margin-right: 140px;
+  }
+  .card-sm {
+    padding-left: 0px !important;
+  }
+  #ultAluguel {
+    width: 170px;
+  }
+}
+@media (max-width: 750px) {
+  .barChartRow {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  #barChart {
+    /* display: flex; */
+    justify-content: center;
+    margin-right: 10px;
+  }
+  #pieChart {
+    display: flex;
+    justify-content: center;
+  }
+}
+@media (max-width: 480px) {
+  #pieChart {
+    display: flex;
+    justify-content: center;
+  }
+  .app {
+    margin: 20px 5px 10px 5px;
   }
 }
 </style>

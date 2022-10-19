@@ -1,11 +1,11 @@
 <template>
   <v-app>
-    <NavBar v-if="notIsLoginPage" />
+    <NavBar v-if="notIsLoginPage && notIsNavBarPage" />
     <v-main>
       <router-view />
     </v-main>
 
-    <Footer v-if="notIsLoginPage" />
+    <Footer v-if="notIsLoginPage && notIsNavBarPage" />
   </v-app>
 </template>
 
@@ -25,6 +25,9 @@ export default {
   computed: {
     notIsLoginPage() {
       return this.$route.name != "login";
+    },
+    notIsNavBarPage() {
+      return this.$route.name != "navbar";
     },
   },
 };
@@ -48,5 +51,9 @@ export default {
     margin: 20px 50px 10px 50px;
   }
 }
-
+@media (max-width: 600px) {
+  .app {
+    margin: 20px 10px 10px 10px;
+  }
+}
 </style>

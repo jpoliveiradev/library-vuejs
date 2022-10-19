@@ -58,20 +58,6 @@ export default {
             vertical: 10,
           },
         },
-
-        responsive: [
-          {
-            breakpoint: 480,
-            options: {
-              chart: {
-                width: 200,
-              },
-              legend: {
-                position: "bottom",
-              },
-            },
-          },
-        ],
       },
     };
   },
@@ -109,32 +95,68 @@ export default {
   display: inline-block;
   position: relative;
   top: 10px;
-  left: 80px;
+  left: 50px;
   width: 450px;
 }
 
 @media (max-width: 1200px) {
   #chart {
-    width: 420px;
-    left: 80px;
+    /* width: 4000px; */
+    left: 60px;
   }
 }
-@media (max-width: 1100px) {
-  #chart {
-    width: 420px;
-    left: 200px;
-  }
-}
-@media (max-width: 1000px) {
+
+@media (max-width: 1150px) {
   #chart {
     width: 450px;
-    left: 200px;
+    left: 60px;
   }
 }
-@media (max-width: 900px) {
+/* @media (min-width: 1100px) {
   #chart {
-    width: 400px;
-    left: 200px;
+    width: 450px;
+    left: 80px;
+  }
+} */
+@media (max-width: 1100px) {
+  #chart {
+    width: 380px;
+    left: 60x;
+  }
+}
+@media (max-width: 810px) {
+  #chart {
+    width: 350px;
+    left: 55px;
+  }
+}
+@media (max-width: 750px) {
+  #chart {
+    width: 420px;
+  }
+}
+
+@media (max-width: 560px) {
+  #chart {
+    width: 350px;
+  }
+}
+@media (max-width: 490px) {
+  #chart {
+    width: 330px;
+    left: 30px;
+    /* margin-left: 90px; */
+  }
+}
+@media (max-width: 480px) {
+  #chart {
+    width: 330px;
+    left: 6px;
+    margin-left: 2px;
+  }
+  #apexchart {
+    width: 330px;
+    margin-left: 20px;
   }
 }
 </style>

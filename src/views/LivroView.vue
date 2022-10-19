@@ -78,7 +78,7 @@
                 <v-card-actions>
                   <v-spacer></v-spacer>
                   <v-btn color="error" text @click="close"> Fechar </v-btn>
-                  <v-btn color="#004D40" text @click="salvar"> Salvar </v-btn>
+                  <v-btn color="#004D40" text @click="salvar" :disabled="awaitLivro"> Salvar </v-btn>
                 </v-card-actions>
               </v-card>
             </v-dialog>
@@ -95,6 +95,7 @@
               itemsPerPageText: 'Linhas por página',
             }"
             :search="search"
+            :header-props="headerProps"
             :loading="loading"
             loading-text="Carregando dados... Aguarde!"
             no-results-text="Nenhum livro encontrado">
@@ -137,7 +138,11 @@ export default {
   name: "livros",
   data: () => {
     return {
+      headerProps: {
+        sortByText: "Ordenar Por",
+      },
       search: "",
+      awaitLivro: true,
       rules: {
         required: (value) => !!value || "Este campo é obrigatório.",
         maxValue: (value) => (value && value.length <= 50) || "Máximo 50 caracteres",
@@ -180,15 +185,20 @@ export default {
     this.listar(), this.listarEditora();
   },
   methods: {
-    listar() {
-      Livro.listar().then((resposta) => {
-        this.livros = resposta.data;
-
-        this.livros.forEach((l) => {
-          l.lancamento = this.parseDate(l.lancamento);
+    async listar() {
+      this.awaitLivro = true;
+      await Livro.listar()
+        .then((resposta) => {
+          this.livros = resposta.data;
+          this.livros.forEach((l) => {
+            l.lancamento = this.parseDate(l.lancamento);
+          });
+          this.loading = false;
+          this.awaitLivro = false;
+        })
+        .catch(() => {
+          this.awaitLivro = true;
         });
-        this.loading = false;
-      });
     },
     listarEditora() {
       Editora.listar().then((resposta) => {
@@ -202,16 +212,18 @@ export default {
       const [dd, mm, yyyy] = date.split("/");
       return `${yyyy}-${mm}-${dd}`;
     },
-    salvar() {
+    async salvar() {
+       this.awaitLivro = true;
       if (this.$refs.form.validate()) {
         if (!this.livro.id) {
-          Livro.salvar(this.livro)
+          await Livro.salvar(this.livro)
             .then(() => {
               this.livro = {};
               this.dialog = false;
               this.$refs.form.resetValidation();
               this.$swal("Livro Adicionado com Sucesso", "", "success");
               this.listar();
+               this.awaitLivro = false;
             })
             .catch((e) => {
               this.livro = {};
@@ -219,6 +231,7 @@ export default {
               this.$refs.form.resetValidation();
               this.$swal({ title: "Erro ao Adicionar Livro", text: e.response.data, icon: "error" });
               this.listar();
+               this.awaitLivro = false;
             });
         } else {
           this.atualizar();
@@ -231,14 +244,16 @@ export default {
       this.livro = { ...livro };
       this.livro.lancamento = this.parseDateISO(livro.lancamento);
     },
-    atualizar() {
-      Livro.atualizar(this.livro)
+   async atualizar() {
+       this.awaitLivro = true;
+    await  Livro.atualizar(this.livro)
         .then(() => {
           this.livro = {};
           this.dialog = false;
           this.$refs.form.resetValidation();
           this.$swal("Livro Atualizado com Sucesso", "", "success");
           this.listar();
+           this.awaitLivro = false;
         })
         .catch((e) => {
           this.livro = {};
@@ -246,6 +261,7 @@ export default {
           this.$refs.form.resetValidation();
           this.$swal({ title: "Erro ao Atualizar Livro", text: e.response.data, icon: "error" });
           this.listar();
+           this.awaitLivro = false;
         });
     },
     remover(id) {
@@ -352,6 +368,38 @@ tbody {
   .v-data-table {
     margin-top: 0;
     margin-left: 0px;
+  }
+}
+@media (min-width: 600px) and (max-width: 840px) {
+  .v-btn--fab.v-size--x-small {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 20px;
+    height: 30px;
+    width: 30px;
+  }
+}
+@media (min-width: 600px) and (max-width: 690px) {
+  .v-btn--fab.v-size--x-small {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    margin-left: 10px;
+    margin-right: 20px;
+    height: 30px;
+    width: 30px;
+  }
+  .v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
+    padding: 0px 8px;
+  }
+}
+@media (max-width: 600px) {
+  .v-data-table > .v-data-table__wrapper > table > tbody > tr > td {
+    font-size: 0.8rem;
   }
 }
 </style>
